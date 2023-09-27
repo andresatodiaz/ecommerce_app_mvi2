@@ -69,15 +69,15 @@ fun ProductoScreen(
         AsyncImage(model = photo, contentDescription = "background",
             modifier= Modifier
                 .fillMaxWidth()
-                .height(120.dp),
+                .height(200.dp),
             contentScale = ContentScale.Crop,
             colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix))
         )
-        Text(producto.titulo,modifier= Modifier.padding(top=50.dp), fontWeight = FontWeight.Black, color = Color.White, fontSize = 20.sp)
+        Text(producto.titulo,modifier= Modifier.padding(top=80.dp), fontWeight = FontWeight.Black, color = Color.White, fontSize = 20.sp)
         LazyColumn(
             modifier= Modifier
                 .fillMaxWidth()
-                .padding(top = 150.dp),
+                .padding(top = 230.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ){
             item{

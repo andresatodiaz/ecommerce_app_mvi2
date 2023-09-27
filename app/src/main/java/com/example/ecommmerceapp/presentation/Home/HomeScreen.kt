@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,7 +78,6 @@ fun HomeScreen(
     LaunchedEffect(key1 = true){
         if(homeViewModel.productos.value.isEmpty()){
             homeViewModel.getProductos()
-            Log.i("entro","xd")
         }
         if(perfilViewModel.myUser.value.nombre.isEmpty()){
             perfilViewModel.getMyUser()
@@ -127,7 +127,10 @@ fun HomeScreen(
                     )
                 }
             ) {
-                LazyVerticalGrid(columns = GridCells.Fixed(2) ){
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2) ,
+                    contentPadding = PaddingValues(top=10.dp,start=10.dp,end=10.dp)
+                ){
                     item(
                         span={GridItemSpan(2)}
                     ){
