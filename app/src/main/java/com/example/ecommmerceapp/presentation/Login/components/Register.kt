@@ -82,6 +82,7 @@ fun Register(
                             nombres.value,
                             apellidos.value
                         )
+                        loginMenu.value=0
                     }
                 },
                 modifier= Modifier.fillMaxWidth()
