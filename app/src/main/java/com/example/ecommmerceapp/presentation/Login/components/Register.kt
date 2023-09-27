@@ -36,7 +36,9 @@ fun Register(
 ) {
     val coroutine= rememberCoroutineScope()
 
-    Column() {
+    Column(
+        modifier=Modifier.padding(20.dp)
+    ) {
         Text("Nombres")
         OutlinedTextField(
             value = nombres.value,
