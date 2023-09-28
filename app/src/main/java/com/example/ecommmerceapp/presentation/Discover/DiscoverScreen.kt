@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -89,7 +90,10 @@ fun DiscoverScreen(
                     )
                 }
             ) {
-                LazyVerticalGrid(columns = GridCells.Fixed(2) ){
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(top=10.dp,start=10.dp,end=10.dp)
+                ){
                     homeViewModel.productos.value.forEachIndexed { index, producto ->
                         item{
                             Card(modifier= Modifier.padding(5.dp)) {
