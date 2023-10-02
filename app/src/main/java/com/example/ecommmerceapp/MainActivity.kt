@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.ecommmerceapp.presentation.MainNavigation.MainNavigationScreen
 import com.example.ecommmerceapp.ui.theme.ECommmerceAppTheme
+import com.example.ecommmerceapp.ui.theme.mainBrown
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,10 +26,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             ECommmerceAppTheme {
                 // A surface container using the 'background' color from the theme
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
+                    val uiController = rememberSystemUiController()
+                    uiController.setSystemBarsColor(mainBrown)
+                    uiController.setNavigationBarColor(mainBrown)
+
                     MainNavigationScreen(
                         finishActivity = finishActivity(flagKillActivity.value),
                         flagKillActivity = flagKillActivity

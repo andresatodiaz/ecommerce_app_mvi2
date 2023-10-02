@@ -4,6 +4,7 @@ import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -13,7 +14,11 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.view.WindowCompat
+import com.example.ecommmerceapp.R
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -36,6 +41,27 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+val myCustomFont = FontFamily(
+    Font(R.font.nunito_regular),
+)
+
+val typography = Typography(
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+    TextStyle(fontFamily = myCustomFont),
+)
 
 @Composable
 fun ECommmerceAppTheme(
@@ -53,18 +79,18 @@ fun ECommmerceAppTheme(
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
-    val view = LocalView.current
+    /*val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
-    }
+    }*/
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = typography,
         content = content
     )
 }

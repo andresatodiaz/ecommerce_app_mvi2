@@ -6,17 +6,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecommmerceapp.MainApplication
 import com.example.ecommmerceapp.data.Entities.Producto
+import com.example.ecommmerceapp.data.Entities.Usuario
 import com.example.ecommmerceapp.data.Service.ProductoService
+import com.example.ecommmerceapp.data.Service.UserService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val productoService: ProductoService
+    private val productoService: ProductoService,
+    private val userService: UserService
 ): ViewModel() {
     val productos = mutableStateOf(emptyList<Producto>())
     val isLoading = mutableStateOf(false)
+    val vendedorProducto = mutableStateOf(Usuario())
 
     fun getProductos(){
         viewModelScope.launch {
@@ -55,6 +59,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             productoService.borrarProducto(producto)
             getProductos()
+        }
+    }
+
+    fun getVendedor(id:String){
+        viewModelScope.launch {
+            if(userService.getVendedor(id)!=null){
+                vendedorProducto.value=userService.getVendedor(id)!!
+            }
         }
     }
 }

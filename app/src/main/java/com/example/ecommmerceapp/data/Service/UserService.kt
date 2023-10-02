@@ -50,4 +50,17 @@ class UserService {
         }
     }
 
+    suspend fun getVendedor(id:String):Usuario?{
+        try{
+            if(UserClient.instance.getVendedor(id)!=null){
+                return UserClient.instance.getVendedor(id)
+            }else{
+                return null
+            }
+        }catch (e:Exception){
+            Log.e("Error obteniendo usuario",e.message.toString())
+            return null
+        }
+    }
+
 }

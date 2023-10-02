@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -32,6 +33,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ecommmerceapp.presentation.CrearProducto.ViewModel.CrearProductoViewModel
+import com.example.ecommmerceapp.ui.theme.complementaryBrown
+import com.example.ecommmerceapp.ui.theme.secondaryBrown
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +78,7 @@ fun CrearProductoScreen(
         ){
             item{
                 Column(modifier=Modifier.fillMaxWidth(0.9f)) {
-                    Text("Titulo")
+                    Text("Titulo", fontWeight = FontWeight.Bold)
                     OutlinedTextField(
                         value = titulo.value,
                         onValueChange = {titulo.value=it},
@@ -87,7 +90,7 @@ fun CrearProductoScreen(
             }
             item{
                 Column(modifier=Modifier.fillMaxWidth(0.9f)) {
-                    Text("Descripcion")
+                    Text("Descripcion", fontWeight = FontWeight.Bold)
                     OutlinedTextField(
                         value = descripcion.value,
                         onValueChange = {descripcion.value=it},
@@ -99,7 +102,7 @@ fun CrearProductoScreen(
             }
             item{
                 Column(modifier=Modifier.fillMaxWidth(0.9f)) {
-                    Text("Precio")
+                    Text("Precio", fontWeight = FontWeight.Bold)
                     OutlinedTextField(
                         value = precio.value,
                         onValueChange = {precio.value=it},
@@ -112,7 +115,7 @@ fun CrearProductoScreen(
             }
             item{
                 Column(modifier=Modifier.fillMaxWidth(0.9f)) {
-                    Text("Estado")
+                    Text("Estado", fontWeight = FontWeight.Bold)
                     OutlinedTextField(
                         value = estado.value,
                         onValueChange = {estado.value=it},
@@ -135,7 +138,11 @@ fun CrearProductoScreen(
                             navController.navigate("home")
                         }
                     },
-                    modifier= Modifier.fillMaxWidth(0.9f)
+                    modifier= Modifier.fillMaxWidth(0.9f),
+                    colors=ButtonDefaults.buttonColors(
+                        containerColor = complementaryBrown,
+                        contentColor = Color.Black
+                    )
                 ) {
                     Text("Vender")
                 }

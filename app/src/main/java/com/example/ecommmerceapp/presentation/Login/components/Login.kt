@@ -27,6 +27,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.ecommmerceapp.presentation.Login.ViewModel.LoginViewModel
+import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,6 +40,7 @@ fun Login(
     goToMain: ()-> Unit
 ) {
     val coroutine= rememberCoroutineScope()
+
     Column(
         modifier=Modifier.padding(20.dp)
     ) {
@@ -70,7 +72,11 @@ fun Login(
                             }
                         }
                     },
-                    modifier= Modifier.fillMaxWidth()
+                    modifier= Modifier.fillMaxWidth(),
+                    colors=ButtonDefaults.buttonColors(
+                        containerColor = complementaryBrown,
+                        contentColor = Color.Black
+                    )
                 ) {
                     Text("Log In")
                 }

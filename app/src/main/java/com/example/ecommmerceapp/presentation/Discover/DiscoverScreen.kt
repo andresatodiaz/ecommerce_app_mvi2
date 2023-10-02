@@ -1,39 +1,55 @@
 package com.example.ecommmerceapp.presentation.Discover
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,6 +57,8 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ecommmerceapp.R
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
+import com.example.ecommmerceapp.ui.theme.cardBrown
+import com.example.ecommmerceapp.ui.theme.secondaryBrown
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -52,6 +70,8 @@ fun DiscoverScreen(
     navController:NavController,
     homeViewModel: HomeViewModel
 ){
+    val focusManager = LocalFocusManager.current
+    val searchName = remember{mutableStateOf("")}
     val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = false)
     LaunchedEffect(key1 = true){
         if (homeViewModel.productos.value.isEmpty()){
@@ -70,7 +90,9 @@ fun DiscoverScreen(
     Scaffold(
     ) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().clickable {
+                focusManager.clearFocus()
+            },
             contentAlignment = Alignment.TopCenter
         ){
             SwipeRefresh(
@@ -92,33 +114,82 @@ fun DiscoverScreen(
             ) {
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(top=10.dp,start=10.dp,end=10.dp)
+                    contentPadding = PaddingValues(top=10.dp,start=10.dp,end=10.dp,bottom=80.dp)
                 ){
-                    homeViewModel.productos.value.forEachIndexed { index, producto ->
-                        item{
-                            Card(modifier= Modifier.padding(5.dp)) {
-                                Box(modifier= Modifier.fillMaxSize()){
-                                    AsyncImage(model = "https://picsum.photos/id/${index}/200/200/?blur=2", contentDescription = "background",
-                                        modifier= Modifier
-                                            .fillMaxWidth()
-                                            .height(80.dp),
-                                        contentScale = ContentScale.Crop,
-                                        colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix))
+                    item(
+                        span={ GridItemSpan(2) }
+                    ){
+                        OutlinedTextField(
+                            value = searchName.value,
+                            onValueChange = {searchName.value=it},
+                            modifier= Modifier.fillMaxWidth().padding(top=10.dp,bottom=20.dp),
+                            shape= CircleShape,
+                            placeholder = {Text("Buscar..")},
+                            singleLine = true,
+                            leadingIcon = {
+                                IconButton(
+                                    modifier = Modifier.alpha(0.5f),
+                                    onClick = {}
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "búsqueda icono",
+                                        tint = Color.Gray
                                     )
-                                    Column(modifier= Modifier.padding(top=90.dp)) {
-                                        Column(
-                                            modifier= Modifier.padding(10.dp)
-                                        ) {
-                                            Text(producto.titulo, fontWeight = FontWeight.Black)
-                                            Text(producto.descripcion, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                                            Row(
-                                                modifier= Modifier.fillMaxWidth(),
-                                                horizontalArrangement = Arrangement.SpaceBetween
-                                            ){
-                                                Text(producto.precio+" $", fontWeight = FontWeight.Bold,modifier= Modifier.padding(top=10.dp))
+                                }
+                            },
+                            trailingIcon = {
+                                if(searchName.value != ""){
+                                    IconButton(onClick = {
+                                        searchName.value = ""}
+                                    ){
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = "close búsqueda",
+                                            tint = Color.LightGray
+                                        )
+                                    }
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Search
+                            )
+                        )
+                    }
+                    homeViewModel.productos.value.forEachIndexed { index, producto ->
+                        if(searchName.value==""
+                            || (searchName.value!="" && producto.titulo.lowercase().contains(searchName.value.lowercase()))
+                        ){
+                            item{
+                                Card(modifier= Modifier.padding(5.dp)) {
+                                    Box(
+                                        modifier= Modifier.fillMaxSize()
+                                            .background(cardBrown)
+                                    ){
+                                        AsyncImage(model = "https://picsum.photos/id/${index}/200/200/?blur=2", contentDescription = "background",
+                                            modifier= Modifier
+                                                .fillMaxWidth()
+                                                .height(80.dp),
+                                            contentScale = ContentScale.Crop,
+                                            colorFilter = ColorFilter.colorMatrix(ColorMatrix(colorMatrix))
+                                        )
+                                        Column(modifier= Modifier.padding(top=90.dp)) {
+                                            Column(
+                                                modifier= Modifier
+                                                    .background(cardBrown)
+                                                    .padding(10.dp)
+                                            ) {
+                                                Text(producto.titulo, fontWeight = FontWeight.Black)
+                                                Text(producto.descripcion, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                                                Row(
+                                                    modifier= Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.SpaceBetween
+                                                ){
+                                                    Text(producto.precio+" $", fontWeight = FontWeight.Bold,modifier= Modifier.padding(top=10.dp))
+
+                                                }
 
                                             }
-
                                         }
                                     }
                                 }

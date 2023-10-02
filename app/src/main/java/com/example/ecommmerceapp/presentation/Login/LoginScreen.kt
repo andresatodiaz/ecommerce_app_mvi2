@@ -1,6 +1,7 @@
 package com.example.ecommmerceapp.presentation.Login
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -61,6 +63,8 @@ fun LoginScreen(
     val coroutine= rememberCoroutineScope()
     val loginMenu = remember{ mutableStateOf(0) }
 
+    val focusManager = LocalFocusManager.current
+
     LaunchedEffect(key1 = true){
         loginViewModel.showUsers()
     }
@@ -77,6 +81,7 @@ fun LoginScreen(
         modifier= Modifier
             .fillMaxSize()
             .background(Color(0xffeeeeee))
+            .clickable { focusManager.clearFocus() }
     ){
         Column(
             modifier= Modifier

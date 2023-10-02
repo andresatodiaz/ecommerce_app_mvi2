@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.example.ecommmerceapp.presentation.Login.ViewModel.LoginViewModel
+import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +88,11 @@ fun Register(
                         loginMenu.value=0
                     }
                 },
-                modifier= Modifier.fillMaxWidth()
+                modifier= Modifier.fillMaxWidth(),
+                colors=ButtonDefaults.buttonColors(
+                    containerColor = complementaryBrown,
+                    contentColor = Color.Black
+                )
             ) {
                 Text("Registrarme")
             }

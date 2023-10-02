@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +38,7 @@ import coil.compose.AsyncImage
 import com.example.ecommmerceapp.LoginActivity
 import com.example.ecommmerceapp.MainApplication
 import com.example.ecommmerceapp.presentation.Perfil.ViewModel.PerfilViewModel
+import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import kotlinx.coroutines.launch
 
 @Composable
@@ -86,14 +88,14 @@ fun PerfilScreen(
         ){
             item{
                 Column(modifier= Modifier.fillMaxWidth(0.9f)) {
-                    Text("Correo")
+                    Text("Correo", fontWeight = FontWeight.Bold)
                     Text(perfilViewModel.myUser.value.correo)
                 }
                 Spacer(Modifier.padding(10.dp))
             }
             item{
                 Column(modifier= Modifier.fillMaxWidth(0.9f)) {
-                    Text("Contrasena")
+                    Text("Contrasena", fontWeight = FontWeight.Bold)
                     Text(perfilViewModel.myUser.value.contrasena)
                 }
                 Spacer(Modifier.padding(10.dp))
@@ -113,7 +115,11 @@ fun PerfilScreen(
                             flagKillActivity.value=true
                         }
                     },
-                    modifier= Modifier.fillMaxWidth(0.9f)
+                    modifier= Modifier.fillMaxWidth(0.9f),
+                    colors= ButtonDefaults.buttonColors(
+                        containerColor = complementaryBrown,
+                        contentColor = Color.Black
+                    )
                 ) {
                     Text("Log out")
                 }

@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.ecommmerceapp.presentation.MainNavigation.BottomNav.Components.NavItem
+import com.example.ecommmerceapp.ui.theme.secondaryBrown
 
 @Composable
 fun BottomNavigationBar(
@@ -41,8 +42,8 @@ fun BottomNavigationBar(
     BottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
-            .height(75.dp)
+            .height(75.dp),
+        containerColor = secondaryBrown
     ) {
         Row(
             modifier=Modifier.fillMaxWidth(),
