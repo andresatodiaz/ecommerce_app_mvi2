@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace 'com.example.ecommmerceapp'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.ecommmerceapp"
         minSdk 24
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -107,4 +107,12 @@ dependencies {
 
     //image compressor
     implementation 'id.zelory:compressor:3.0.1'
+
+    def camerax_version = "1.4.0-alpha01"
+    implementation "androidx.camera:camera-camera2:${camerax_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_version}"
+    implementation "androidx.camera:camera-view:${camerax_version}"
+    implementation 'com.google.mlkit:barcode-scanning:17.2.0'
+    implementation "com.google.mlkit:digital-ink-recognition:17.0.0"
+    implementation 'androidx.work:work-runtime-ktx:2.7.1'
 }

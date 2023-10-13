@@ -24,17 +24,19 @@ fun MainNavigationScreen (
     navController : NavHostController = rememberNavController(),
     finishActivity : Unit,
     flagKillActivity : MutableState<Boolean>,
+    showQRScanner: MutableState<Boolean>
 ){
     Scaffold(
         bottomBar = {
             BottomNavigationBar(navController = navController)
         }
     ) {
-        Box(modifier=Modifier.fillMaxHeight(0.9f)){
+        Box(modifier=Modifier.fillMaxHeight()){
             MainNavigationGraph(
                 navController,
                 finishActivity ,
-                flagKillActivity
+                flagKillActivity,
+                showQRScanner=showQRScanner
             )
         }
 

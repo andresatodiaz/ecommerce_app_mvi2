@@ -24,6 +24,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -65,6 +67,7 @@ import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.presentation.Perfil.ViewModel.PerfilViewModel
 import com.example.ecommmerceapp.ui.theme.cardBrown
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
+import com.example.ecommmerceapp.ui.theme.mainBrown
 import com.example.ecommmerceapp.ui.theme.secondaryBrown
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -97,6 +100,12 @@ fun HomeScreen(
         id.value=sp.getString("LOGGED_ID","")!!
     }
 
+    LaunchedEffect(key1 = perfilViewModel.myUser.value.id){
+        if(homeViewModel.misProductos.value.isEmpty()){
+            homeViewModel.getMisProductos(perfilViewModel.myUser.value.id)
+        }
+    }
+
     val brightness = -80f
     val colorMatrix = floatArrayOf(
         1f, 0f, 0f, 0f, brightness,
@@ -108,9 +117,11 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
+                shape= CircleShape,
+                modifier=Modifier.padding(bottom = 70.dp),
                 containerColor = complementaryBrown,
                 onClick = {
-                navController.navigate("crearProducto")
+                navController.navigate("vender")
             }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "vender")
             }
@@ -245,26 +256,19 @@ fun HomeScreen(
                                                     horizontalArrangement = Arrangement.SpaceBetween
                                                 ){
                                                     Text(producto.precio+" $", fontWeight = FontWeight.Bold,modifier=Modifier.padding(top=10.dp))
-                                                    Button(
-                                                        colors = ButtonDefaults.buttonColors(
-                                                            containerColor = if(producto.compradoPor==id.value){
-                                                                Color.Black
-                                                            }else{
-                                                                Color.White
-                                                            }
-                                                        ),
-                                                        onClick = {
-                                                            homeViewModel.comprarProducto(producto)
-                                                            homeViewModel.getProductos()
+                                                    if(producto.compradoPor==id.value){
+                                                        Row(){
+                                                            Icon(
+                                                                imageVector = Icons.Default.ShoppingCart,
+                                                                contentDescription = "",
+                                                                modifier=Modifier.size(20.dp),
+                                                                tint= mainBrown)
+                                                            Icon(
+                                                                imageVector = Icons.Default.Check,
+                                                                contentDescription = "",
+                                                                modifier=Modifier.size(20.dp),
+                                                                tint= mainBrown)
                                                         }
-                                                    ) {
-                                                        Icon(painter = painterResource(id = R.drawable.buy),"",modifier=Modifier.size(20.dp),
-                                                            tint=if(producto.compradoPor==id.value){
-                                                                Color.White
-                                                            }else{
-                                                                Color.Black
-                                                            }
-                                                        )
                                                     }
                                                 }
 

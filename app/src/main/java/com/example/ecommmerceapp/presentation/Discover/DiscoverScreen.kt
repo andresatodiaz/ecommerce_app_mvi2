@@ -34,6 +34,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -90,9 +92,11 @@ fun DiscoverScreen(
     Scaffold(
     ) {
         Box(
-            modifier = Modifier.fillMaxSize().clickable {
-                focusManager.clearFocus()
-            },
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable {
+                    focusManager.clearFocus()
+                },
             contentAlignment = Alignment.TopCenter
         ){
             SwipeRefresh(
@@ -122,7 +126,9 @@ fun DiscoverScreen(
                         OutlinedTextField(
                             value = searchName.value,
                             onValueChange = {searchName.value=it},
-                            modifier= Modifier.fillMaxWidth().padding(top=10.dp,bottom=20.dp),
+                            modifier= Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp, bottom = 20.dp),
                             shape= CircleShape,
                             placeholder = {Text("Buscar..")},
                             singleLine = true,
@@ -153,6 +159,10 @@ fun DiscoverScreen(
                             },
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Search
+                            ),
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = cardBrown,
+                                unfocusedIndicatorColor = Color.Transparent
                             )
                         )
                     }
@@ -163,7 +173,8 @@ fun DiscoverScreen(
                             item{
                                 Card(modifier= Modifier.padding(5.dp)) {
                                     Box(
-                                        modifier= Modifier.fillMaxSize()
+                                        modifier= Modifier
+                                            .fillMaxSize()
                                             .background(cardBrown)
                                     ){
                                         AsyncImage(model = "https://picsum.photos/id/${index}/200/200/?blur=2", contentDescription = "background",

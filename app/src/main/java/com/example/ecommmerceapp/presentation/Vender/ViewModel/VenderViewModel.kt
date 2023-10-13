@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.presentation.CrearProducto.ViewModel
+package com.example.ecommmerceapp.presentation.Vender.ViewModel
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CrearProductoViewModel @Inject constructor(
+class VenderViewModel @Inject constructor(
     private val productoService: ProductoService
 ): ViewModel() {
     fun agregarProducto(titulo:String,descripcion:String,precio:String,estado:Int){
