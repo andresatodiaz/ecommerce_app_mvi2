@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.ecommmerceapp.data.Entities.Usuario
 import com.example.ecommmerceapp.data.Interface.UserClient
 
-class UserService {
+class UsuarioService {
 
     suspend fun showUsers(){
         try{

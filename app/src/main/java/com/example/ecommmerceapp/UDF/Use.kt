@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.MVI
+package com.example.ecommmerceapp.UDF
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState

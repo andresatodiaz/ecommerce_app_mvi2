@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommmerceapp.data.MLKitModelStatus
+import com.example.ecommmerceapp.data.Model.MLKitModelStatus
 import com.example.ecommmerceapp.data.Provider.DigitalInkProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

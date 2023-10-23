@@ -6,6 +6,7 @@ import com.example.ecommmerceapp.data.Interface.ProductoClient
 import kotlin.Exception
 
 class ProductoService {
+
     suspend fun getProductos():List<Producto>?{
         try{
             val productos = ProductoClient.instance.getProductos()

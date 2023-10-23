@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
@@ -25,7 +25,6 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,24 +39,23 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ecommmerceapp.MainApplication
 import com.example.ecommmerceapp.R
+import com.example.ecommmerceapp.UDF.use
 import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.Entities.Usuario
+import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.presentation.Perfil.ViewModel.PerfilViewModel
+import com.example.ecommmerceapp.presentation.Producto.Intent.ProductoContract
+import com.example.ecommmerceapp.presentation.Producto.ViewModel.ProductoViewModel
 import com.example.ecommmerceapp.ui.theme.cardBrown
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import com.example.ecommmerceapp.ui.theme.priceColor
-import com.example.ecommmerceapp.ui.theme.secondaryBrown
 import kotlinx.coroutines.launch
 
 @Composable
@@ -65,13 +63,16 @@ fun ProductoScreen(
     photo: String,
     producto:Producto,
     navController: NavController,
-    homeViewModel: HomeViewModel,
-    perfilViewModel: PerfilViewModel,
+    productoViewModel: ProductoViewModel,
     showQRScanner:MutableState<Boolean>
 ) {
+    val (state,event,effect)= use(productoViewModel)
+
     LaunchedEffect(key1 = true){
-        homeViewModel.vendedorProducto.value= Usuario()
-        homeViewModel.getVendedor(producto.vendidoPor!!)
+        Log.i("producto",producto.vendidoPor!!.toString())
+        event.invoke(
+            ProductoContract.Event.onGetData(producto.vendidoPor!!)
+        )
     }
 
     Log.i("photo",photo)
@@ -107,7 +108,8 @@ fun ProductoScreen(
             modifier= Modifier
                 .fillMaxWidth()
                 .padding(top = 230.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            contentPadding = PaddingValues(bottom=100.dp)
         ){
             item{
                 Column(modifier= Modifier.fillMaxWidth(0.9f)) {
@@ -170,15 +172,11 @@ fun ProductoScreen(
                             .padding(10.dp)
                             .fillMaxWidth()
                     ) {
-                        if(homeViewModel.loadingVendedor.value || homeViewModel.vendedorProducto.value.id==""){
+                        if( state.vendedor.id==""){
                             Text("Cargando vendedor")
                         }else{
-                            if(!homeViewModel.vendedorEmpty.value){
-                                Text(homeViewModel.vendedorProducto.value.nombre.capitalize()+" "+homeViewModel.vendedorProducto.value.apellido.capitalize())
-                                Text(homeViewModel.vendedorProducto.value.correo, fontWeight = FontWeight.Bold)
-                            }else{
-                                Text("Usuario no disponible")
-                            }
+                            Text(state.vendedor.nombre.capitalize()+" "+state.vendedor.apellido.capitalize())
+                            Text(state.vendedor.correo, fontWeight = FontWeight.Bold)
                         }
                     }
                 }
@@ -191,13 +189,15 @@ fun ProductoScreen(
                 ){
                     Column(modifier=Modifier.width(150.dp)){
                         Button(
-                            enabled = producto.vendidoPor!=perfilViewModel.myUser.value.id,
+                            enabled = producto.vendidoPor!=state.usuario.id,
                             onClick = {
-                                if(producto.compradoPor!=perfilViewModel.myUser.value.id){
+                                if(producto.compradoPor!=state.usuario.id){
                                     navController.navigate("compra")
                                 }else{
-                                    homeViewModel.comprarProducto(producto)
-                                    homeViewModel.getProductos()
+                                    event.invoke(
+                                        ProductoContract.Event.onDeshacerCompra(producto)
+                                    )
+
                                     navController.navigate("home")
                                 }
 
@@ -208,7 +208,7 @@ fun ProductoScreen(
                                 contentColor = Color.Black
                             )
                         ) {
-                            if(producto.compradoPor!=perfilViewModel.myUser.value.id){
+                            if(producto.compradoPor!=state.usuario.id){
                                 Text("Comprar")
                             }else{
                                 Text("Cancelar compra")
@@ -216,14 +216,14 @@ fun ProductoScreen(
                             Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "compra",modifier=Modifier.padding(5.dp))
                         }
                         Spacer(modifier = Modifier.padding(5.dp))
-                        if(producto.vendidoPor==perfilViewModel.myUser.value.id){
+                        if(producto.vendidoPor==state.usuario.id){
                             Button(
                                 onClick = {
                                     coroutine.launch {
-                                        homeViewModel.borrarProducto(producto)
+                                        event.invoke(
+                                            ProductoContract.Event.onEliminarProducto(producto)
+                                        )
                                         navController.navigate("home")
-                                        homeViewModel.getProductos()
-                                        homeViewModel.getMisProductos(perfilViewModel.myUser.value.id)
                                     }
                                 },
                                 modifier= Modifier.fillMaxWidth(),

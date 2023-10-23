@@ -15,24 +15,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,23 +39,22 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ecommmerceapp.LoginActivity
 import com.example.ecommmerceapp.MainApplication
+import com.example.ecommmerceapp.UDF.use
 import com.example.ecommmerceapp.data.Entities.Producto
+import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
+import com.example.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
 import com.example.ecommmerceapp.presentation.Perfil.ViewModel.PerfilViewModel
 import com.example.ecommmerceapp.ui.theme.cardBrown
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
-import com.example.ecommmerceapp.ui.theme.mainBrown
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -72,14 +65,17 @@ fun PerfilScreen(
     finishActivity : Unit,
     flagKillActivity : MutableState<Boolean>,
     perfilViewModel: PerfilViewModel,
-    homeViewModel: HomeViewModel,
     navController:NavController,
     selectedProducto:MutableState<Producto>,
     selectedProductoUrl:MutableState<String>,
 ) {
-    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = homeViewModel.isLoading.value)
+
     val context= LocalContext.current
     val coroutine = rememberCoroutineScope()
+
+    val (state, event, effect) = use(viewModel = perfilViewModel)
+    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = perfilViewModel.refreshing.value)
+
     val brightness = -50f
     val colorMatrix = floatArrayOf(
         1f, 0f, 0f, 0f, brightness,
@@ -88,8 +84,10 @@ fun PerfilScreen(
         0f, 0f, 0f, 1f, 0f
     )
     LaunchedEffect(key1 = true){
-        if(perfilViewModel.myUser.value.nombre.isEmpty()){
-            perfilViewModel.getMyUser()
+        if(state.usuario.id==""){
+            event.invoke(
+                PerfilContract.Event.getPerfil
+            )
         }
         Log.i("nombre",perfilViewModel.myUser.value.nombre.toString())
     }
@@ -112,7 +110,7 @@ fun PerfilScreen(
             verticalAlignment = Alignment.CenterVertically
         ){
             Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "person",tint=Color.White,modifier=Modifier.padding(end=10.dp))
-            Text(perfilViewModel.myUser.value.nombre.capitalize()+" "+perfilViewModel.myUser.value.apellido.capitalize(),
+            Text(state.usuario.nombre.capitalize()+" "+state.usuario.apellido.capitalize(),
                 fontWeight = FontWeight.Black,
                 color = Color.White,
                 fontSize = 30.sp
@@ -146,7 +144,9 @@ fun PerfilScreen(
         SwipeRefresh(
             state = swipeRefreshState,
             onRefresh = {
-                homeViewModel.getMisProductos(perfilViewModel.myUser.value.id)
+                event.invoke(
+                    PerfilContract.Event.getPerfil
+                )
             },
             indicator = { state, trigger ->
                 SwipeRefreshIndicator(
@@ -169,27 +169,35 @@ fun PerfilScreen(
                 item{
                     Column(modifier= Modifier.fillMaxWidth(0.9f)) {
                         Text("Correo", fontWeight = FontWeight.Bold)
-                        Text(perfilViewModel.myUser.value.correo)
+                        Text(state.usuario.correo)
                     }
                     Spacer(Modifier.padding(10.dp))
                 }
                 item{
                     Column(modifier= Modifier.fillMaxWidth(0.9f)) {
                         Text("Contrasena", fontWeight = FontWeight.Bold)
-                        Text(perfilViewModel.myUser.value.contrasena)
+                        Text(state.usuario.contrasena)
                     }
                     Spacer(Modifier.padding(10.dp))
                 }
                 item{
                     Text("Mis productos", fontWeight = FontWeight.Bold,modifier=Modifier.fillMaxWidth(0.9f))
-                    if(homeViewModel.misProductos.value.isEmpty()){
-                        Text("No hay productos",modifier= Modifier
-                            .padding(top = 10.dp)
-                            .fillMaxWidth(0.9f),color=Color.Gray)
+
+                    if(state.productos.isEmpty()){
+                        if(state.refreshing){
+                            Text("No hay productos",modifier= Modifier
+                                .padding(top = 10.dp)
+                                .fillMaxWidth(0.9f),color=Color.Gray)
+                        }else{
+                            Text("Cargando productos...",modifier= Modifier
+                                .padding(top = 10.dp)
+                                .fillMaxWidth(0.9f),color=Color.Gray)
+                        }
+
                     }
                     Spacer(Modifier.padding(10.dp))
                 }
-                itemsIndexed(homeViewModel.misProductos.value){index,producto->
+                itemsIndexed(state.productos){index,producto->
                     Card(
                         modifier= Modifier
                             .padding(5.dp, 5.dp, 5.dp, 10.dp)

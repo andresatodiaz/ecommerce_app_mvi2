@@ -1,5 +1,7 @@
 package com.example.ecommmerceapp.presentation.QrScanner
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -30,8 +32,12 @@ import androidx.navigation.NavController
 import com.example.ecommmerceapp.presentation.QrScanner.ViewModel.QrScannerViewModel
 import com.example.ecommmerceapp.ui.theme.cardBrown
 import com.example.ecommmerceapp.ui.theme.mainBrown
+import com.example.ecommmerceapp.utils.MemoryConsumption
 import kotlinx.coroutines.delay
+import java.time.LocalDateTime
+import java.time.LocalTime
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalGetImage
 @Composable
 fun QrScannerScreen(

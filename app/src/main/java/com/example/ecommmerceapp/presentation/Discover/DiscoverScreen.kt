@@ -8,12 +8,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -21,20 +19,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,19 +42,16 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.ecommmerceapp.R
+import com.example.ecommmerceapp.UDF.use
+import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.ui.theme.cardBrown
-import com.example.ecommmerceapp.ui.theme.secondaryBrown
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -74,10 +65,13 @@ fun DiscoverScreen(
 ){
     val focusManager = LocalFocusManager.current
     val searchName = remember{mutableStateOf("")}
-    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = false)
+    val (state, event, effect) = use(viewModel = homeViewModel)
+    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = homeViewModel.refreshing.value)
     LaunchedEffect(key1 = true){
-        if (homeViewModel.productos.value.isEmpty()){
-            homeViewModel.getProductos()
+        if(state.productos.isEmpty()){
+            event.invoke(
+                HomeContract.Event.onGetProductos
+            )
         }
     }
 
@@ -102,7 +96,9 @@ fun DiscoverScreen(
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = {
-                    homeViewModel.getProductos()
+                    event.invoke(
+                        HomeContract.Event.onGetProductos
+                    )
                 },
                 indicator = { state, trigger ->
                     SwipeRefreshIndicator(
@@ -166,7 +162,7 @@ fun DiscoverScreen(
                             )
                         )
                     }
-                    homeViewModel.productos.value.forEachIndexed { index, producto ->
+                    state.productos.forEachIndexed { index, producto ->
                         if(searchName.value==""
                             || (searchName.value!="" && producto.titulo.lowercase().contains(searchName.value.lowercase()))
                         ){

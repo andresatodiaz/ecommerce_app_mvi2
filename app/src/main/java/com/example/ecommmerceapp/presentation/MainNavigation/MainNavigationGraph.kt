@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ecommmerceapp.data.Entities.Producto
 import com.example.ecommmerceapp.presentation.Compra.CompraScreen
+import com.example.ecommmerceapp.presentation.Compra.ViewModel.CompraViewModel
 import com.example.ecommmerceapp.presentation.Vender.CrearProductoScreen
 import com.example.ecommmerceapp.presentation.Vender.ViewModel.VenderViewModel
 import com.example.ecommmerceapp.presentation.Discover.DiscoverScreen
@@ -20,6 +21,7 @@ import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.presentation.Perfil.PerfilScreen
 import com.example.ecommmerceapp.presentation.Perfil.ViewModel.PerfilViewModel
 import com.example.ecommmerceapp.presentation.Producto.ProductoScreen
+import com.example.ecommmerceapp.presentation.Producto.ViewModel.ProductoViewModel
 import com.example.ecommmerceapp.presentation.QrScanner.QrScannerScreen
 import com.example.ecommmerceapp.presentation.QrScanner.ViewModel.QrScannerViewModel
 import com.example.ecommmerceapp.presentation.Signature.DigitalInkViewModel
@@ -34,6 +36,8 @@ fun MainNavigationGraph(
     homeViewModel: HomeViewModel = hiltViewModel(),
     perfilViewModel: PerfilViewModel = hiltViewModel(),
     venderViewModel: VenderViewModel = hiltViewModel(),
+    compraViewModel: CompraViewModel = hiltViewModel(),
+    productoViewModel: ProductoViewModel = hiltViewModel(),
     showQRScanner: MutableState<Boolean>,
     qrScannerViewModel: QrScannerViewModel= hiltViewModel(),
     digitalInkViewModel: DigitalInkViewModel = hiltViewModel<DigitalInkViewModelImpl>()
@@ -47,7 +51,7 @@ fun MainNavigationGraph(
         ) {
         composable("home"){
             qrScannerViewModel.qrLink.value=""
-            HomeScreen(navController,selectedProducto,selectedProductoUrl,homeViewModel,perfilViewModel)
+            HomeScreen(navController,selectedProducto,selectedProductoUrl,homeViewModel)
         }
         composable("discover"){
             DiscoverScreen(navController,homeViewModel)
@@ -57,14 +61,12 @@ fun MainNavigationGraph(
                 finishActivity,
                 flagKillActivity,
                 perfilViewModel,
-                homeViewModel,
                 navController,selectedProducto,selectedProductoUrl
             )
         }
         composable("vender"){
             CrearProductoScreen(navController,
                 venderViewModel,
-                homeViewModel
             )
         }
         composable("producto"){
@@ -76,9 +78,8 @@ fun MainNavigationGraph(
                 photo = selectedProductoUrl.value,
                 producto = selectedProducto.value,
                 navController=navController,
-                homeViewModel=homeViewModel,
+                productoViewModel =productoViewModel,
                 showQRScanner=showQRScanner,
-                perfilViewModel = perfilViewModel
             )
         }
         composable("compra"){
@@ -89,7 +90,7 @@ fun MainNavigationGraph(
                 photo = selectedProductoUrl.value,
                 producto = selectedProducto.value,
                 navController=navController,
-                homeViewModel=homeViewModel,
+                compraViewModel = compraViewModel,
                 qrScannerViewModel=qrScannerViewModel,
                 digitalInkViewModel=digitalInkViewModel
             )

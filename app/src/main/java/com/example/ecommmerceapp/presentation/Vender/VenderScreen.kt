@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -51,8 +50,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.ecommmerceapp.R
+import com.example.ecommmerceapp.UDF.use
+import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
 import com.example.ecommmerceapp.presentation.Vender.ViewModel.VenderViewModel
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
+import com.example.ecommmerceapp.presentation.Vender.Intent.VenderContract
 import com.example.ecommmerceapp.ui.theme.cardBrown
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import kotlinx.coroutines.launch
@@ -62,7 +64,6 @@ import kotlinx.coroutines.launch
 fun CrearProductoScreen(
     navController: NavController,
     venderViewModel: VenderViewModel,
-    homeViewModel: HomeViewModel
 ) {
     val titulo = remember{ mutableStateOf("") }
     val descripcion = remember{ mutableStateOf("") }
@@ -70,6 +71,9 @@ fun CrearProductoScreen(
     val estado = remember{ mutableStateOf("1") }
     val tablero = listOf<Int>(1,2,3,4,5,6,7,8,9,10)
     var expanded = remember { mutableStateOf(false) }
+
+
+    val (state,event,effect)= use(venderViewModel)
 
     val coroutine = rememberCoroutineScope()
 
@@ -221,12 +225,13 @@ fun CrearProductoScreen(
                     Button(
                         onClick = {
                             coroutine.launch {
-                                venderViewModel.agregarProducto(titulo.value, descripcion.value, precio.value, estado.value.toInt())
+                                event.invoke(
+                                    VenderContract.Event.Vender(titulo.value, descripcion.value, precio.value, estado.value.toInt())
+                                )
                                 titulo.value=""
                                 descripcion.value=""
                                 precio.value=""
                                 estado.value=""
-                                homeViewModel.getProductos()
                                 navController.navigate("home")
                             }
                         },

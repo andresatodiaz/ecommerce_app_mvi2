@@ -1,12 +1,10 @@
 package com.example.ecommmerceapp.presentation.Login.components
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,15 +15,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import com.example.ecommmerceapp.UDF.use
+import com.example.ecommmerceapp.presentation.Login.Intent.LoginContract
 import com.example.ecommmerceapp.presentation.Login.ViewModel.LoginViewModel
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import kotlinx.coroutines.launch
@@ -40,6 +38,7 @@ fun Login(
     goToMain: ()-> Unit
 ) {
     val coroutine= rememberCoroutineScope()
+    val (state, event, effect) = use(viewModel = loginViewModel)
 
     Column(
         modifier=Modifier.padding(20.dp)
@@ -48,7 +47,8 @@ fun Login(
             OutlinedTextField(
                 value = correo.value,
                 onValueChange = {correo.value=it},
-                modifier= Modifier.fillMaxWidth(),
+                modifier= Modifier.fillMaxWidth()
+                    .testTag("userTag"),
                 shape= CircleShape
             )
             Spacer(Modifier.padding(10.dp))
@@ -56,7 +56,8 @@ fun Login(
             OutlinedTextField(
                 value = contrasena.value,
                 onValueChange = {contrasena.value=it},
-                modifier= Modifier.fillMaxWidth(),
+                modifier= Modifier.fillMaxWidth()
+                    .testTag("passTag"),
                 shape= CircleShape
             )
             Spacer(Modifier.padding(10.dp))
@@ -67,12 +68,15 @@ fun Login(
                 Button(
                     onClick = {
                         coroutine.launch {
-                            loginViewModel.login(correo.value,contrasena.value){
-                                goToMain()
-                            }
+                            event.invoke(
+                                LoginContract.Event.Login(correo.value,contrasena.value){
+                                    goToMain()
+                                }
+                            )
                         }
                     },
-                    modifier= Modifier.fillMaxWidth(),
+                    modifier= Modifier.fillMaxWidth()
+                        .testTag("loginTag"),
                     colors=ButtonDefaults.buttonColors(
                         containerColor = complementaryBrown,
                         contentColor = Color.Black

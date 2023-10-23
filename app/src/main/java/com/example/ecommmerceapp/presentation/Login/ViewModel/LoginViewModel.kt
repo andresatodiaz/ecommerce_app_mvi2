@@ -1,66 +1,69 @@
 package com.example.ecommmerceapp.presentation.Login.ViewModel
 
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecommmerceapp.MainApplication
 import com.example.ecommmerceapp.data.Entities.Usuario
-import com.example.ecommmerceapp.data.Service.UserService
+import com.example.ecommmerceapp.data.Service.UsuarioService
+import com.example.ecommmerceapp.data.repository.UsuarioRepository
+import com.example.ecommmerceapp.presentation.Login.Intent.LoginContract
+import com.example.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
+import com.example.ecommmerceapp.utils.MemoryConsumption
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.Duration
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userService: UserService
-): ViewModel() {
+    private val usuarioRepository: UsuarioRepository
+): ViewModel(), LoginContract {
     val loggedUser= mutableStateOf(Usuario())
     val loginSuccess = mutableStateOf(false)
     val loginLoading = mutableStateOf(true)
-    fun showUsers(){
+
+    private val mutableState = MutableStateFlow(LoginContract.State())
+    override val state: StateFlow<LoginContract.State> =
+        mutableState.asStateFlow()
+
+    private val effectFlow = MutableSharedFlow<LoginContract.Effect>()
+    override val effect: SharedFlow<LoginContract.Effect> =
+        effectFlow.asSharedFlow()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override fun event(event: LoginContract.Event) = when(event){
+        is LoginContract.Event.Login ->
+            loginContract(event.correo,event.contrasena,event.goToMain)
+        is LoginContract.Event.Register ->
+            registerContract(event.correo,event.contrasena,event.nombres,event.apellidos)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun loginContract(correo: String, contrasena: String, goToMain: () -> Unit){
         viewModelScope.launch {
-            userService.showUsers()
+            val startTime = LocalTime.now()
+            usuarioRepository.login(correo,contrasena,goToMain)
+            Log.i("comp-ExecutionTime", Duration.between(startTime,LocalTime.now()).toMillis().toString())
+            Log.i("comp-MemoryConsump", MemoryConsumption().getUsedMemorySize().toString())
+
         }
     }
 
-    fun login(correo: String, contrasena: String,goToMain: ()->Unit){
+    private fun registerContract(correo: String,contrasena: String,nombres: String,apellidos: String){
         viewModelScope.launch {
-            loginLoading.value=true
-            if(userService.login(correo,contrasena)!=null){
-                loggedUser.value= userService.login(correo,contrasena)!!
-                Log.i("loginSuccess","true")
-                Log.i("loggedUser",loggedUser.value.toString())
-                val sp = MainApplication.applicationContext().getSharedPreferences(
-                    "preferences",
-                    Context.MODE_PRIVATE
-                ).edit()
-                sp.putString("LOGGED_ID",loggedUser.value.id.toString())
-                goToMain()
-                sp.apply()
-                loginLoading.value=false
-                loginSuccess.value=true
-            }else{
-                loginLoading.value=false
-                loginSuccess.value=false
-            }
-
-        }
-    }
-
-    fun agregarUsuario(correo: String, contrasena: String, nombres: String, apellidos:String){
-        viewModelScope.launch {
-            userService.agregarUsuario(
-                Usuario(
-                    "",
-                    nombres,
-                    apellidos,
-                    null,
-                    correo,
-                    contrasena
-                )
-            )
+            usuarioRepository.register(correo,contrasena,nombres,apellidos)
         }
     }
 }

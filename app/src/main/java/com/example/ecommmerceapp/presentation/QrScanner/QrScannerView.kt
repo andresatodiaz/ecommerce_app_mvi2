@@ -11,14 +11,12 @@ import androidx.camera.core.ImageCapture
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.example.ecommmerceapp.mlKit.barcodeScanner.BarcodeAnalyser
+import com.example.ecommmerceapp.data.Analyser.BarcodeAnalyser
 import java.util.concurrent.Executors
 
 @ExperimentalGetImage

@@ -16,11 +16,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.example.ecommmerceapp.UDF.use
+import com.example.ecommmerceapp.presentation.Login.Intent.LoginContract
 import com.example.ecommmerceapp.presentation.Login.ViewModel.LoginViewModel
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import kotlinx.coroutines.launch
@@ -36,6 +34,7 @@ fun Register(
     loginMenu: MutableState<Int>
 ) {
     val coroutine= rememberCoroutineScope()
+    val (state, event, effect) = use(viewModel = loginViewModel)
 
     Column(
         modifier=Modifier.padding(20.dp)
@@ -79,11 +78,13 @@ fun Register(
             Button(
                 onClick = {
                     coroutine.launch {
-                        loginViewModel.agregarUsuario(
-                            correo.value,
-                            contrasena.value,
-                            nombres.value,
-                            apellidos.value
+                        event.invoke(
+                            LoginContract.Event.Register(
+                                correo.value,
+                                contrasena.value,
+                                nombres.value,
+                                apellidos.value
+                            )
                         )
                         loginMenu.value=0
                     }

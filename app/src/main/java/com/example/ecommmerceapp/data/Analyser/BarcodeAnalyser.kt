@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.mlKit.barcodeScanner
+package com.example.ecommmerceapp.data.Analyser
 
 import android.util.Log
 import androidx.camera.core.ExperimentalGetImage

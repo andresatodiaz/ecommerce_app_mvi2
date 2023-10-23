@@ -1,7 +1,10 @@
 package com.example.ecommmerceapp.data.Provider
 
+import android.os.Build
 import android.util.Log
-import com.example.ecommmerceapp.data.MLKitModelStatus
+import androidx.annotation.RequiresApi
+import com.example.ecommmerceapp.data.Model.MLKitModelStatus
+import com.example.ecommmerceapp.utils.MemoryConsumption
 import com.google.mlkit.common.model.DownloadConditions
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.vision.digitalink.*
@@ -10,6 +13,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import java.time.Duration
+import java.time.LocalTime
 import javax.inject.Inject
 
 class DigitalInkProviderImpl @Inject constructor(): DigitalInkProvider {
@@ -29,6 +34,13 @@ class DigitalInkProviderImpl @Inject constructor(): DigitalInkProvider {
             .builder(this.recognitionModel)
             .build()
     )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private var startTime = LocalTime.now()
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private var endTime = LocalTime.now()
 
     override fun checkIfModelIsDownlaoded(): Flow<MLKitModelStatus> = callbackFlow {
         trySend(MLKitModelStatus.CheckingDownload)
@@ -69,11 +81,14 @@ class DigitalInkProviderImpl @Inject constructor(): DigitalInkProvider {
         awaitClose { cancel() }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun record(x: Float, y: Float) {
+        startTime= LocalTime.now()
         val point = Ink.Point.create(x, y)
         this.strokeBuilder.addPoint(point)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun finishRecording() {
         val stroke = this.strokeBuilder.build()
 
@@ -87,6 +102,9 @@ class DigitalInkProviderImpl @Inject constructor(): DigitalInkProvider {
                 .addOnSuccessListener {
                         result -> this.predictions.trySend(result.candidates.map { it.text })
                     Log.e("success",result.candidates.toString())
+                    endTime= LocalTime.now()
+                    Log.i("comp-ExecutionTime",Duration.between(startTime,endTime).toMillis().toString())
+                    Log.i("comp-MemoryConsump",MemoryConsumption().getUsedMemorySize().toString())
                 }
                 .addOnFailureListener {
                     it.printStackTrace()

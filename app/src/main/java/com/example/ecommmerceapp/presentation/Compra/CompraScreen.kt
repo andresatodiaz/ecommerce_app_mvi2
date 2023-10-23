@@ -1,7 +1,9 @@
 package com.example.ecommmerceapp.presentation.Compra
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,15 +21,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ShoppingCart
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,8 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.capitalize
@@ -49,7 +46,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
@@ -58,17 +54,21 @@ import com.example.ecommmerceapp.data.Entities.Producto
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.presentation.QrScanner.ViewModel.QrScannerViewModel
 import com.example.ecommmerceapp.presentation.Signature.DigitalInkViewModel
-import com.example.ecommmerceapp.presentation.Signature.DigitalInkViewModelImpl
 import com.example.ecommmerceapp.presentation.Signature.DrawSpace
-import com.example.ecommmerceapp.presentation.Signature.LocalDigitalInkViewModel
 import com.example.ecommmerceapp.presentation.Signature.use
 import com.example.ecommmerceapp.ui.theme.cardBrown
 import com.example.ecommmerceapp.ui.theme.complementaryBrown
 import com.example.ecommmerceapp.ui.theme.mainBrown
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.ecommmerceapp.utils.MemoryConsumption
+import com.example.ecommmerceapp.UDF.use
+import com.example.ecommmerceapp.presentation.Compra.Intent.CompraContract
+import com.example.ecommmerceapp.presentation.Compra.ViewModel.CompraViewModel
+import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
+import com.example.ecommmerceapp.presentation.QrScanner.Intent.QrScannerContract
+import java.time.LocalTime
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +76,7 @@ fun CompraScreen(
     photo: String,
     producto: Producto,
     navController: NavController,
-    homeViewModel: HomeViewModel,
+    compraViewModel: CompraViewModel,
     qrScannerViewModel: QrScannerViewModel,
     digitalInkViewModel: DigitalInkViewModel
 ) {
@@ -84,9 +84,17 @@ fun CompraScreen(
     val resetCanvas = remember{ mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val (state, event) = use(digitalInkViewModel, DigitalInkViewModel.State())
+    val (compraState,compraEvent,compraEffect)= use(compraViewModel)
+    val (qrState,qrEvent,qrEffect)= use(qrScannerViewModel)
 
     LaunchedEffect(key1 = true ){
         event(DigitalInkViewModel.Event.ResetText)
+        qrEvent.invoke(
+            QrScannerContract.Event.getTimeExecution
+        )
+        qrEvent.invoke(
+            QrScannerContract.Event.getRamExecution
+        )
     }
 
     DisposableEffect(Unit) {
@@ -103,7 +111,9 @@ fun CompraScreen(
 
 
     LaunchedEffect(key1 = true){
-        homeViewModel.getVendedor(producto.vendidoPor!!)
+        compraEvent.invoke(
+            CompraContract.Event.onGetVendedor(producto.vendidoPor!!)
+        )
         discountLink.value=qrScannerViewModel.qrLink.value
         Log.i("barcode2",qrScannerViewModel.qrLink.value)
 
@@ -115,8 +125,10 @@ fun CompraScreen(
                 shape= CircleShape,
                 modifier=Modifier.padding(bottom = 70.dp),
                 onClick = {
-                    homeViewModel.comprarProducto(producto)
-                    homeViewModel.getProductos()
+                    compraEvent.invoke(
+                        CompraContract.Event.onComprarProducto(producto)
+                    )
+
                     navController.navigate("home")
                           },
                 containerColor = complementaryBrown
@@ -171,8 +183,8 @@ fun CompraScreen(
                                     .size(100.dp)
                             )
                             Column(modifier=Modifier.padding(start=10.dp)) {
-                                Text(homeViewModel.vendedorProducto.value.nombre.capitalize()+" "+homeViewModel.vendedorProducto.value.apellido.capitalize())
-                                Text(homeViewModel.vendedorProducto.value.correo, fontWeight = FontWeight.Black)
+                                Text(compraState.vendedor.nombre.capitalize()+" "+compraState.vendedor.apellido.capitalize())
+                                Text(compraState.vendedor.correo, fontWeight = FontWeight.Black)
                             }
 
                         }
@@ -240,6 +252,9 @@ fun CompraScreen(
                         Button(
                             onClick = {
                                 navController.navigate("qrscanner")
+                                qrEvent.invoke(
+                                    QrScannerContract.Event.setStartEx(LocalTime.now())
+                                )
                             },
                             modifier= Modifier.fillMaxWidth(),
                             colors= ButtonDefaults.buttonColors(
