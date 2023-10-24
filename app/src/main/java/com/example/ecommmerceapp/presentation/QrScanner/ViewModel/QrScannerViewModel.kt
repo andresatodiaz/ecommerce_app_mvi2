@@ -61,10 +61,10 @@ class QrScannerViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getExecutionTime(){
-        Log.i("comp-ExecutionTime", Duration.between(mutableState.value.startEx,LocalTime.now()).toMillis().toString())
+        Log.i("comp-ExecutionTime-Qr", Duration.between(mutableState.value.startEx,LocalTime.now()).toMillis().toString())
     }
 
     fun getMemoryUsage(){
-        Log.i("comp-MemoryConsump", MemoryConsumption().getUsedMemorySize().toString())
+        Log.i("comp-MemoryConsumpQr", MemoryConsumption().getUsedMemorySize().toString())
     }
 }

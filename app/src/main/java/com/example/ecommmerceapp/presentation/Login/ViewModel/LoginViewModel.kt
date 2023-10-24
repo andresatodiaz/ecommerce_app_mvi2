@@ -55,8 +55,8 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val startTime = LocalTime.now()
             usuarioRepository.login(correo,contrasena,goToMain)
-            Log.i("comp-ExecutionTime", Duration.between(startTime,LocalTime.now()).toMillis().toString())
-            Log.i("comp-MemoryConsump", MemoryConsumption().getUsedMemorySize().toString())
+            Log.i("comp-ExecutionTime-Login", Duration.between(startTime,LocalTime.now()).toMillis().toString())
+            Log.i("comp-MemoryConsump-Login", MemoryConsumption().getUsedMemorySize().toString())
 
         }
     }

@@ -48,7 +48,7 @@ class UsuarioRepository(
             "preferences",
             Context.MODE_PRIVATE
         )
-        if(usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!) != null){
+        if(usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!) != null && sp.getString("LOGGED_ID","")!=""){
             return usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!)!!
         }else{
             return Usuario()

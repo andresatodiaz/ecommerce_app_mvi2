@@ -48,8 +48,8 @@ class VenderViewModel @Inject constructor(
         viewModelScope.launch {
             val startTime = LocalTime.now()
             productoRepository.agregarProducto(titulo,descripcion,precio,estado)
-            Log.i("comp-ExecutionTime", Duration.between(startTime, LocalTime.now()).toMillis().toString())
-            Log.i("comp-MemoryConsump", MemoryConsumption().getUsedMemorySize().toString())
+            Log.i("comp-ExecutionTime-Vender", Duration.between(startTime, LocalTime.now()).toMillis().toString())
+            Log.i("comp-MemoryConsump-Vender", MemoryConsumption().getUsedMemorySize().toString())
         }
     }
 }

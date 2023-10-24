@@ -86,8 +86,8 @@ class HomeViewModel @Inject constructor(
                 )
             }
             refreshing.value=false
-            Log.i("comp-ExecutionTime", Duration.between(startTime,LocalTime.now()).toMillis().toString())
-            Log.i("comp-MemoryConsump", MemoryConsumption().getUsedMemorySize().toString())
+            Log.i("comp-ExecutionTime-Home", Duration.between(startTime,LocalTime.now()).toMillis().toString())
+            Log.i("comp-MemoryConsump-Home", MemoryConsumption().getUsedMemorySize().toString())
         }
 
     }

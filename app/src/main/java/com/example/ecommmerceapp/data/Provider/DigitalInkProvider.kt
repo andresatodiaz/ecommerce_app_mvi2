@@ -103,8 +103,8 @@ class DigitalInkProviderImpl @Inject constructor(): DigitalInkProvider {
                         result -> this.predictions.trySend(result.candidates.map { it.text })
                     Log.e("success",result.candidates.toString())
                     endTime= LocalTime.now()
-                    Log.i("comp-ExecutionTime",Duration.between(startTime,endTime).toMillis().toString())
-                    Log.i("comp-MemoryConsump",MemoryConsumption().getUsedMemorySize().toString())
+                    Log.i("comp-ExecutionTime-Signature",Duration.between(startTime,endTime).toMillis().toString())
+                    Log.i("comp-MemoryConsump-Signature",MemoryConsumption().getUsedMemorySize().toString())
                 }
                 .addOnFailureListener {
                     it.printStackTrace()
