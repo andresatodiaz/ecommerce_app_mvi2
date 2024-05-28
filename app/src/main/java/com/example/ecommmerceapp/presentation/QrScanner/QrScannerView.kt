@@ -16,7 +16,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
-import com.example.ecommmerceapp.data.Analyser.BarcodeAnalyser
+import com.example.ecommmerceapp.data.DataSource.MLKit.Analyser.BarcodeAnalyser
 import java.util.concurrent.Executors
 
 @ExperimentalGetImage

@@ -1,11 +1,11 @@
 package com.example.ecommmerceapp.di
 
-import com.example.ecommmerceapp.data.Provider.DigitalInkProvider
-import com.example.ecommmerceapp.data.Provider.DigitalInkProviderImpl
+import com.example.ecommmerceapp.data.DataSource.MLKit.InkProvider.DigitalInkProvider
+import com.example.ecommmerceapp.data.DataSource.MLKit.InkProvider.DigitalInkProviderImpl
 import com.example.ecommmerceapp.data.Service.ProductoService
 import com.example.ecommmerceapp.data.Service.UsuarioService
-import com.example.ecommmerceapp.data.repository.ProductoRepository
-import com.example.ecommmerceapp.data.repository.UsuarioRepository
+import com.example.ecommmerceapp.data.repository.ProductoRepositoryImpl
+import com.example.ecommmerceapp.data.repository.UsuarioRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,8 +28,8 @@ abstract class AppModule {
         }
         @Provides
         @Singleton
-        fun provideUsuarioRepository(usuarioService: UsuarioService): UsuarioRepository{
-            return UsuarioRepository(usuarioService)
+        fun provideUsuarioRepository(usuarioService: UsuarioService): UsuarioRepositoryImpl {
+            return UsuarioRepositoryImpl(usuarioService)
         }
 
 
@@ -41,10 +41,9 @@ abstract class AppModule {
 
         @Provides
         @Singleton
-        fun provideProductoRepository(productoService: ProductoService): ProductoRepository{
-            return ProductoRepository(productoService)
+        fun provideProductoRepository(productoService: ProductoService): ProductoRepositoryImpl {
+            return ProductoRepositoryImpl(productoService)
         }
-
 
 
 

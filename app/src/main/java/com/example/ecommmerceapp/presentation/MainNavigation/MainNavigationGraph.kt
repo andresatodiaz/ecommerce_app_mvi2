@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.ecommmerceapp.data.Entities.Producto
+import com.example.ecommmerceapp.domain.Entities.Producto
 import com.example.ecommmerceapp.presentation.Compra.CompraScreen
 import com.example.ecommmerceapp.presentation.Compra.ViewModel.CompraViewModel
 import com.example.ecommmerceapp.presentation.Vender.CrearProductoScreen

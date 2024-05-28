@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.data.Entities
+package com.example.ecommmerceapp.domain.Entities
 
 data class Producto(
     val id: String = "",

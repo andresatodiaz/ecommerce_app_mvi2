@@ -1,16 +1,11 @@
 package com.example.ecommmerceapp.presentation.Vender.ViewModel
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommmerceapp.MainApplication
-import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.Service.ProductoService
-import com.example.ecommmerceapp.data.repository.ProductoRepository
-import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
+import com.example.ecommmerceapp.data.repository.ProductoRepositoryImpl
 import com.example.ecommmerceapp.presentation.Vender.Intent.VenderContract
 import com.example.ecommmerceapp.utils.MemoryConsumption
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +22,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VenderViewModel @Inject constructor(
-    private val productoRepository: ProductoRepository
+    private val productoRepository: ProductoRepositoryImpl
 ): ViewModel(), VenderContract {
 
     private val mutableState = MutableStateFlow(VenderContract.State())

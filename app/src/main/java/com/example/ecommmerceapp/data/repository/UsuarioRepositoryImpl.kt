@@ -3,13 +3,13 @@ package com.example.ecommmerceapp.data.repository
 import android.content.Context
 import android.util.Log
 import com.example.ecommmerceapp.MainApplication
-import com.example.ecommmerceapp.data.Entities.Usuario
+import com.example.ecommmerceapp.domain.Entities.Usuario
 import com.example.ecommmerceapp.data.Service.UsuarioService
 
-class UsuarioRepository(
+class UsuarioRepositoryImpl(
     private val usuarioService: UsuarioService
 ) {
-    suspend fun getVendedor(id:String):Usuario?{
+    suspend fun getVendedor(id:String): Usuario?{
         Log.i("vendedor",id)
         if(usuarioService.getVendedor(id)==null){
             return Usuario()
@@ -43,7 +43,7 @@ class UsuarioRepository(
         )
     }
 
-    suspend fun getMyUser():Usuario{
+    suspend fun getMyUser(): Usuario {
         val sp = MainApplication.applicationContext().getSharedPreferences(
             "preferences",
             Context.MODE_PRIVATE

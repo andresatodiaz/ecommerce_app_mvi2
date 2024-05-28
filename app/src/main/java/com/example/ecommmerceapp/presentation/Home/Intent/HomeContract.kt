@@ -1,8 +1,8 @@
 package com.example.ecommmerceapp.presentation.Home.Intent
 
 import com.example.ecommmerceapp.UDF.UnidirectionalViewModel
-import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.Entities.Usuario
+import com.example.ecommmerceapp.domain.Entities.Producto
+import com.example.ecommmerceapp.domain.Entities.Usuario
 
 interface HomeContract:
     UnidirectionalViewModel<HomeContract.State, HomeContract.Event, HomeContract.Effect>{

@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.data.Provider
+package com.example.ecommmerceapp.data.DataSource.MLKit.InkProvider
 
 import android.os.Build
 import android.util.Log

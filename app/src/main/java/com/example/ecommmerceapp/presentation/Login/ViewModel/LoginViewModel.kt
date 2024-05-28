@@ -1,18 +1,15 @@
 package com.example.ecommmerceapp.presentation.Login.ViewModel
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommmerceapp.MainApplication
-import com.example.ecommmerceapp.data.Entities.Usuario
-import com.example.ecommmerceapp.data.Service.UsuarioService
-import com.example.ecommmerceapp.data.repository.UsuarioRepository
+import com.example.ecommmerceapp.domain.Entities.Usuario
+import com.example.ecommmerceapp.data.repository.UsuarioRepositoryImpl
+import com.example.ecommmerceapp.domain.Repository.UsuarioRepository
 import com.example.ecommmerceapp.presentation.Login.Intent.LoginContract
-import com.example.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
 import com.example.ecommmerceapp.utils.MemoryConsumption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -30,10 +27,6 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val usuarioRepository: UsuarioRepository
 ): ViewModel(), LoginContract {
-    val loggedUser= mutableStateOf(Usuario())
-    val loginSuccess = mutableStateOf(false)
-    val loginLoading = mutableStateOf(true)
-
     private val mutableState = MutableStateFlow(LoginContract.State())
     override val state: StateFlow<LoginContract.State> =
         mutableState.asStateFlow()

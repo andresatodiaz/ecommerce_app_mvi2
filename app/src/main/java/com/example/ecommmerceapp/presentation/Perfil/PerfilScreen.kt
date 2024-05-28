@@ -48,7 +48,7 @@ import coil.compose.AsyncImage
 import com.example.ecommmerceapp.LoginActivity
 import com.example.ecommmerceapp.MainApplication
 import com.example.ecommmerceapp.UDF.use
-import com.example.ecommmerceapp.data.Entities.Producto
+import com.example.ecommmerceapp.domain.Entities.Producto
 import com.example.ecommmerceapp.presentation.Home.Intent.HomeContract
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.presentation.Perfil.Intent.PerfilContract

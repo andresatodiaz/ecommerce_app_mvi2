@@ -1,7 +1,7 @@
 package com.example.ecommmerceapp.presentation.Login.Intent
 
 import com.example.ecommmerceapp.UDF.UnidirectionalViewModel
-import com.example.ecommmerceapp.data.Entities.Usuario
+import com.example.ecommmerceapp.domain.Entities.Usuario
 
 interface LoginContract:
     UnidirectionalViewModel<LoginContract.State, LoginContract.Event, LoginContract.Effect>{

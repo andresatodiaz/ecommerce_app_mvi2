@@ -1,6 +1,6 @@
-package com.example.ecommmerceapp.data.Interface
+package com.example.ecommmerceapp.data.DataSource.Interface
 
-import com.example.ecommmerceapp.data.Entities.Producto
+import com.example.ecommmerceapp.domain.Entities.Producto
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body

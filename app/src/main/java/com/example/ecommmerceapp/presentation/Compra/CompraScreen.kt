@@ -50,7 +50,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.example.ecommmerceapp.data.Entities.Producto
+import com.example.ecommmerceapp.domain.Entities.Producto
 import com.example.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.example.ecommmerceapp.presentation.QrScanner.ViewModel.QrScannerViewModel
 import com.example.ecommmerceapp.presentation.Signature.DigitalInkViewModel

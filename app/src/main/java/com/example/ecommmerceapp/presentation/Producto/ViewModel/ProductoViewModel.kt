@@ -2,10 +2,9 @@ package com.example.ecommmerceapp.presentation.Producto.ViewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.repository.ProductoRepository
-import com.example.ecommmerceapp.data.repository.UsuarioRepository
-import com.example.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
+import com.example.ecommmerceapp.domain.Entities.Producto
+import com.example.ecommmerceapp.data.repository.ProductoRepositoryImpl
+import com.example.ecommmerceapp.data.repository.UsuarioRepositoryImpl
 import com.example.ecommmerceapp.presentation.Producto.Intent.ProductoContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -20,8 +19,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductoViewModel @Inject constructor(
-    private val productoRepository: ProductoRepository,
-    private val usuarioRepository: UsuarioRepository
+    private val productoRepository: ProductoRepositoryImpl,
+    private val usuarioRepository: UsuarioRepositoryImpl
 ): ViewModel(), ProductoContract {
     private val mutableState = MutableStateFlow(ProductoContract.State())
     override val state: StateFlow<ProductoContract.State> =
@@ -40,7 +39,7 @@ class ProductoViewModel @Inject constructor(
             getData(event.id)
     }
 
-    private fun eliminar(producto:Producto){
+    private fun eliminar(producto: Producto){
         viewModelScope.launch {
             productoRepository.borrarProducto(producto)
         }

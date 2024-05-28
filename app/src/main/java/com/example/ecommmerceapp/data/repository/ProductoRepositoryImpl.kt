@@ -3,11 +3,10 @@ package com.example.ecommmerceapp.data.repository
 import android.content.Context
 import android.util.Log
 import com.example.ecommmerceapp.MainApplication
-import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.Interface.ProductoClient
+import com.example.ecommmerceapp.domain.Entities.Producto
 import com.example.ecommmerceapp.data.Service.ProductoService
 
-class ProductoRepository(
+class ProductoRepositoryImpl(
     private val productoService: ProductoService
 ) {
     suspend fun getProductos(): List<Producto>? {

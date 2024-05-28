@@ -5,11 +5,12 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.repository.ProductoRepository
-import com.example.ecommmerceapp.data.repository.UsuarioRepository
+import com.example.ecommmerceapp.domain.Entities.Producto
+import com.example.ecommmerceapp.data.repository.ProductoRepositoryImpl
+import com.example.ecommmerceapp.data.repository.UsuarioRepositoryImpl
+import com.example.ecommmerceapp.domain.Repository.ProductoRepository
+import com.example.ecommmerceapp.domain.Repository.UsuarioRepository
 import com.example.ecommmerceapp.presentation.Compra.Intent.CompraContract
-import com.example.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
 import com.example.ecommmerceapp.utils.MemoryConsumption
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

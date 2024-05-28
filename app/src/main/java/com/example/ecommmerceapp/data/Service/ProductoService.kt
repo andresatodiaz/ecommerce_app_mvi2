@@ -1,8 +1,8 @@
 package com.example.ecommmerceapp.data.Service
 
 import android.util.Log
-import com.example.ecommmerceapp.data.Entities.Producto
-import com.example.ecommmerceapp.data.Interface.ProductoClient
+import com.example.ecommmerceapp.domain.Entities.Producto
+import com.example.ecommmerceapp.data.DataSource.Interface.ProductoClient
 import kotlin.Exception
 
 class ProductoService {

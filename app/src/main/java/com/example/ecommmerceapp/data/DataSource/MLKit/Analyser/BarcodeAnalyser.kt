@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.data.Analyser
+package com.example.ecommmerceapp.data.DataSource.MLKit.Analyser
 
 import android.util.Log
 import androidx.camera.core.ExperimentalGetImage

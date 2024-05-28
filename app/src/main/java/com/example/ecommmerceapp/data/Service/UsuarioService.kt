@@ -1,8 +1,8 @@
 package com.example.ecommmerceapp.data.Service
 
 import android.util.Log
-import com.example.ecommmerceapp.data.Entities.Usuario
-import com.example.ecommmerceapp.data.Interface.UserClient
+import com.example.ecommmerceapp.domain.Entities.Usuario
+import com.example.ecommmerceapp.data.DataSource.Interface.UserClient
 
 class UsuarioService {
 
@@ -15,7 +15,7 @@ class UsuarioService {
         }
     }
 
-    suspend fun login(correo:String, contrasena:String):Usuario?{
+    suspend fun login(correo:String, contrasena:String): Usuario?{
         try{
             val userResponse = UserClient.instance.login(correo, contrasena)
             if(userResponse!=null){
@@ -37,7 +37,7 @@ class UsuarioService {
         }
     }
 
-    suspend fun miUsuario(id:String):Usuario?{
+    suspend fun miUsuario(id:String): Usuario?{
         try{
             if(UserClient.instance.myUser(id)!=null){
                 return UserClient.instance.myUser(id)
@@ -50,7 +50,7 @@ class UsuarioService {
         }
     }
 
-    suspend fun getVendedor(id:String):Usuario?{
+    suspend fun getVendedor(id:String): Usuario?{
         try{
             if(UserClient.instance.getVendedor(id)!=null){
                 return UserClient.instance.getVendedor(id)
