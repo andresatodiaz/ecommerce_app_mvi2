@@ -1,10 +1,10 @@
-package com.example.ecommmerceapp
+package com.mvi.ecommmerceapp
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.example.ecommmerceapp.presentation.Login.LoginScreen
+import com.mvi.ecommmerceapp.presentation.Login.LoginScreen
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,6 +23,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.ecommmerceapp", appContext.packageName)
+        assertEquals("com.mvi.ecommmerceapp", appContext.packageName)
     }*/
 }

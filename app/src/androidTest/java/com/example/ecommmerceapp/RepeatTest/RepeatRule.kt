@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp.RepeatTest
+package com.mvi.ecommmerceapp.RepeatTest
 
 import org.junit.rules.TestRule
 import org.junit.runner.Description

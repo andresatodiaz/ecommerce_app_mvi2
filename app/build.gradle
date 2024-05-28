@@ -6,17 +6,17 @@ plugins {
 }
 
 android {
-    namespace 'com.example.ecommmerceapp'
+    namespace 'com.mvi.ecommmerceapp'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.ecommmerceapp"
+        applicationId "com.mvi.ecommmerceapp"
         minSdk 24
         targetSdk 34
         versionCode 1
         versionName "1.0"
 
-        //testInstrumentationRunner "com.example.ecommmerceapp.Runner"
+        //testInstrumentationRunner "com.mvi.ecommmerceapp.Runner"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true

@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp
+package com.mvi.ecommmerceapp
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag

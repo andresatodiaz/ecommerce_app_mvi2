@@ -1,4 +1,4 @@
-package com.example.ecommmerceapp
+package com.mvi.ecommmerceapp
 
 import org.junit.Test
 

@@ -1,9 +1,9 @@
-package com.example.ecommmerceapp
+package com.mvi.ecommmerceapp
 
-import com.example.ecommmerceapp.data.Provider.DigitalInkProvider
-import com.example.ecommmerceapp.data.Provider.DigitalInkProviderImpl
-import com.example.ecommmerceapp.data.Service.ProductoService
-import com.example.ecommmerceapp.data.Service.UsuarioService
+import com.mvi.ecommmerceapp.data.Provider.DigitalInkProvider
+import com.mvi.ecommmerceapp.data.Provider.DigitalInkProviderImpl
+import com.mvi.ecommmerceapp.data.Service.ProductoService
+import com.mvi.ecommmerceapp.data.Service.UsuarioService
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
