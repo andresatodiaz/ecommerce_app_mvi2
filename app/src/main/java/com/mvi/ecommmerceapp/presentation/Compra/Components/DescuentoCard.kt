@@ -1,4 +1,4 @@
-package com.mvi.ecommmerceapp.presentation.Components
+package com.mvi.ecommmerceapp.presentation.Compra.Components
 
 import android.os.Build
 import androidx.annotation.RequiresApi

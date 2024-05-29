@@ -23,7 +23,6 @@ fun MainNavigationScreen (
     navController : NavHostController = rememberNavController(),
     finishActivity : Unit,
     flagKillActivity : MutableState<Boolean>,
-    showQRScanner: MutableState<Boolean>
 ){
     Scaffold(
         bottomBar = {
@@ -35,7 +34,6 @@ fun MainNavigationScreen (
                 navController,
                 finishActivity ,
                 flagKillActivity,
-                showQRScanner=showQRScanner
             )
         }
 

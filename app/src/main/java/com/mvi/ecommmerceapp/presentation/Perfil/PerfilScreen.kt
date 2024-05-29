@@ -1,6 +1,5 @@
 package com.mvi.ecommmerceapp.presentation.Perfil
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,7 +43,9 @@ fun PerfilScreen(
     selectedProductoUrl:MutableState<String>,
 ) {
     val (state, event) = use(viewModel = perfilViewModel)
-    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = perfilViewModel.state.collectAsState().value.refreshing)
+    val refreshing=perfilViewModel.state.collectAsState().value.refreshing
+    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing =refreshing )
+    val productos=state.productos
 
     LaunchedEffect(key1 = true){
         if(state.usuario.id==""){
@@ -102,7 +103,7 @@ fun PerfilScreen(
                     }
                     Spacer(Modifier.padding(10.dp))
                 }
-                itemsIndexed(state.productos){index,producto->
+                itemsIndexed(productos){index,producto->
                     MyProduct(
                         selectedProductoUrl = selectedProductoUrl ,
                         selectedProducto = selectedProducto,

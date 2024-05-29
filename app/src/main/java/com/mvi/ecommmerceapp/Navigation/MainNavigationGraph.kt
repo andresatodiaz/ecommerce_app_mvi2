@@ -43,7 +43,6 @@ fun MainNavigationGraph(
     compraViewModel: CompraViewModel = hiltViewModel(),
     productoViewModel: ProductoViewModel = hiltViewModel(),
     discoverViewModel: DiscoverViewModel= hiltViewModel(),
-    showQRScanner: MutableState<Boolean>,
     qrScannerViewModel: QrScannerViewModel= hiltViewModel(),
     digitalInkViewModel: DigitalInkViewModel = hiltViewModel<DigitalInkViewModelImpl>()
 ) {
@@ -91,7 +90,6 @@ fun MainNavigationGraph(
                 photo = selectedProductoUrl.value,
                 producto = selectedProducto.value,
                 navController=navController,
-                showQRScanner=showQRScanner,
                 productoViewModel = productoViewModel
             )
         }

@@ -39,12 +39,12 @@ class ProductoViewModel @Inject constructor(
             getData(event.id)
     }
 
-    private fun eliminar(producto: Producto){
+    fun eliminar(producto: Producto){
         viewModelScope.launch {
             productoRepository.borrarProducto(producto)
         }
     }
-    private fun deshacer(producto: Producto){
+    fun deshacer(producto: Producto){
         viewModelScope.launch {
             productoRepository.comprarProducto(producto)
         }

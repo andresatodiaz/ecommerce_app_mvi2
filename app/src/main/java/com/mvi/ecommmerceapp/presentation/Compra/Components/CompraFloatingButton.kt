@@ -1,4 +1,4 @@
-package com.mvi.ecommmerceapp.presentation.Components
+package com.mvi.ecommmerceapp.presentation.Compra.Components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
