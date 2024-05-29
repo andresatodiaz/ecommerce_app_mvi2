@@ -39,9 +39,9 @@ class CompraViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun event(event: CompraContract.Event)= when(event) {
-        is CompraContract.Event.onComprarProducto->
+        is CompraContract.Event.OnComprarProducto->
             comprar(event.producto)
-        is CompraContract.Event.onGetVendedor->
+        is CompraContract.Event.OnGetVendedor->
             getVendedor(event.id)
     }
 

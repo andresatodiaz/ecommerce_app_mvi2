@@ -33,7 +33,6 @@ interface ProductoClient {
     )
 
     companion object {
-        //private val BASE_URL = "http://10.0.2.2:9999/"
         private val BASE_URL ="https://ecommerceapprestapi-production.up.railway.app"
         val instance: ProductoClient by lazy{
             Retrofit.Builder()

@@ -59,7 +59,7 @@ fun HomeScreen(
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = {
-                    event.invoke(HomeContract.Event.onRefresh)
+                    event.invoke(HomeContract.Event.onGetProductos)
                 },
                 indicator = { state, trigger ->
                     HomeSwipeIndicator(state,trigger)

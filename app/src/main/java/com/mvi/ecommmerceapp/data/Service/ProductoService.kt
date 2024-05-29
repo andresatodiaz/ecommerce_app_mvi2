@@ -3,17 +3,16 @@ package com.mvi.ecommmerceapp.data.Service
 import android.util.Log
 import com.mvi.ecommmerceapp.domain.Entities.Producto
 import com.mvi.ecommmerceapp.data.DataSource.Interface.ProductoClient
-import kotlin.Exception
 
 class ProductoService {
 
     suspend fun getProductos():List<Producto>?{
         try{
             val productos = ProductoClient.instance.getProductos()
-            if(productos.isNotEmpty()){
-                return productos
+            return if(productos.isNotEmpty()){
+                productos
             }else{
-                return emptyList()
+                emptyList()
             }
         }catch (e:Exception){
             return emptyList()
@@ -23,10 +22,10 @@ class ProductoService {
     suspend fun misProductos(id: Long):List<Producto>{
         try {
             val misProductos = ProductoClient.instance.misProductos(id)
-            if(misProductos.isNotEmpty()){
-                return misProductos
+            return if(misProductos.isNotEmpty()){
+                misProductos
             }else{
-                return emptyList()
+                emptyList()
             }
         }catch (e:Exception){
             return emptyList()
@@ -37,7 +36,7 @@ class ProductoService {
         try{
             ProductoClient.instance.agregarProducto(producto)
         }catch (e:Exception){
-            Log.e("Error agregando producto",e.message.toString())
+            Log.e("AgregarProducto",e.message.toString())
         }
     }
 
@@ -45,7 +44,7 @@ class ProductoService {
         try{
             ProductoClient.instance.comprarProducto(producto)
         }catch (e:Exception){
-
+            Log.e("ComprarProducto",e.message.toString())
         }
     }
 
@@ -53,7 +52,7 @@ class ProductoService {
         try{
             ProductoClient.instance.borrarProducto(producto)
         }catch (e:Exception){
-
+            Log.e("BorrarProducto",e.message.toString())
         }
     }
 

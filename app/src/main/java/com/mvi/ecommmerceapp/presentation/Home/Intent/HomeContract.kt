@@ -15,7 +15,6 @@ interface HomeContract:
 
     sealed class Event {
         object onGetProductos : Event()
-        object onRefresh: Event()
     }
 
     sealed class Effect{

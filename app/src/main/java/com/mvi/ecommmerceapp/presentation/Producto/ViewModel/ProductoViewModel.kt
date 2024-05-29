@@ -31,11 +31,11 @@ class ProductoViewModel @Inject constructor(
         effectFlow.asSharedFlow()
 
     override fun event(event: ProductoContract.Event)= when(event) {
-        is ProductoContract.Event.onEliminarProducto->
+        is ProductoContract.Event.OnEliminarProducto->
             eliminar(event.producto)
-        is ProductoContract.Event.onDeshacerCompra->
+        is ProductoContract.Event.OnDeshacerCompra->
             deshacer(event.producto)
-        is ProductoContract.Event.onGetData->
+        is ProductoContract.Event.OnGetData->
             getData(event.id)
     }
 

@@ -68,7 +68,7 @@ fun ProductoScreen(
     LaunchedEffect(key1 = true){
         Log.i("producto",producto.vendidoPor!!.toString())
         event.invoke(
-            ProductoContract.Event.onGetData(producto.vendidoPor!!)
+            ProductoContract.Event.OnGetData(producto.vendidoPor!!)
         )
     }
 
@@ -192,7 +192,7 @@ fun ProductoScreen(
                                     navController.navigate("compra")
                                 }else{
                                     event.invoke(
-                                        ProductoContract.Event.onDeshacerCompra(producto)
+                                        ProductoContract.Event.OnDeshacerCompra(producto)
                                     )
 
                                     navController.navigate("home")
@@ -218,7 +218,7 @@ fun ProductoScreen(
                                 onClick = {
                                     coroutine.launch {
                                         event.invoke(
-                                            ProductoContract.Event.onEliminarProducto(producto)
+                                            ProductoContract.Event.OnEliminarProducto(producto)
                                         )
                                         navController.navigate("home")
                                     }

@@ -11,11 +11,11 @@ interface CompraContract:
         )
 
         sealed class Event{
-            data class  onGetVendedor(val id:String): Event()
-            data class onComprarProducto(val producto: Producto): Event()
+            data class  OnGetVendedor(val id:String): Event()
+            data class OnComprarProducto(val producto: Producto): Event()
         }
 
         sealed class Effect{
-
+            object onBackPressed: CompraContract.Effect()
         }
 }

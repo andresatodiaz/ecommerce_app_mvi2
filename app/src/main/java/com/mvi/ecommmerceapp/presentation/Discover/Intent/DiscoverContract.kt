@@ -19,6 +19,6 @@ interface DiscoverContract:
     }
 
     sealed class Effect{
-
+        object onBackPressed: DiscoverContract.Effect()
     }
 }

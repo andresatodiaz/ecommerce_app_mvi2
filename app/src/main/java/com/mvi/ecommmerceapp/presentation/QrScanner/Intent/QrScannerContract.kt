@@ -3,6 +3,7 @@ package com.mvi.ecommmerceapp.presentation.QrScanner.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.mvi.ecommmerceapp.UDF.UnidirectionalViewModel
+import com.mvi.ecommmerceapp.presentation.Home.Intent.HomeContract
 import java.time.LocalTime
 
 interface QrScannerContract:
@@ -21,6 +22,6 @@ interface QrScannerContract:
         }
 
         sealed class Effect{
-
+            object onBackPressed: QrScannerContract.Effect()
         }
 }

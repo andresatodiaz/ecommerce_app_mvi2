@@ -33,8 +33,6 @@ class PerfilViewModel @Inject constructor(
     override fun event(event: PerfilContract.Event)= when(event) {
         is PerfilContract.Event.getPerfil->
             getData()
-        is PerfilContract.Event.onRefresh->
-            getData()
     }
 
     private fun getData(){

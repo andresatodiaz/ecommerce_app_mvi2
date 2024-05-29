@@ -12,11 +12,10 @@ class UsuarioRepositoryImpl(
 ): UsuarioRepository {
     override suspend fun getVendedor(id:String): Usuario?{
         Log.i("vendedor",id)
-        if(usuarioService.getVendedor(id)==null){
-            return Usuario()
+        return if(usuarioService.getVendedor(id)==null){
+            Usuario()
         }else{
-            Log.i("vendedor",usuarioService.getVendedor(id).toString())
-            return usuarioService.getVendedor(id)
+            usuarioService.getVendedor(id)
         }
     }
 
@@ -49,10 +48,10 @@ class UsuarioRepositoryImpl(
             "preferences",
             Context.MODE_PRIVATE
         )
-        if(usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!) != null && sp.getString("LOGGED_ID","")!=""){
-            return usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!)!!
+        return if(usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!) != null && sp.getString("LOGGED_ID","")!=""){
+            usuarioService.miUsuario(sp.getString("LOGGED_ID","")!!)!!
         }else{
-            return Usuario()
+            Usuario()
         }
     }
 }

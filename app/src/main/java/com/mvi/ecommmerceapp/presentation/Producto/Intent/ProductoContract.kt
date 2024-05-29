@@ -11,11 +11,11 @@ interface ProductoContract:
             val usuario: Usuario = Usuario()
         )
          sealed class Event{
-             data class onDeshacerCompra(val producto: Producto): Event()
-             data class onEliminarProducto(val producto: Producto): Event()
-             data class onGetData(val id:String):Event()
+             data class OnDeshacerCompra(val producto: Producto): Event()
+             data class OnEliminarProducto(val producto: Producto): Event()
+             data class OnGetData(val id:String):Event()
          }
         sealed class Effect{
-
+            object onBackPressed: ProductoContract.Effect()
         }
 }

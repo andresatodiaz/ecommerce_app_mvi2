@@ -1,6 +1,8 @@
 package com.mvi.ecommmerceapp.presentation.Vender.Intent
 
 import com.mvi.ecommmerceapp.UDF.UnidirectionalViewModel
+import com.mvi.ecommmerceapp.presentation.Home.Intent.HomeContract
+import com.mvi.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
 
 interface VenderContract:
     UnidirectionalViewModel<VenderContract.State, VenderContract.Event, VenderContract.Effect> {
@@ -18,6 +20,6 @@ interface VenderContract:
         }
 
         sealed class Effect{
-
+            object onBackPressed: VenderContract.Effect()
         }
 }

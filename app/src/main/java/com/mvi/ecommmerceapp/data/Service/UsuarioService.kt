@@ -18,10 +18,10 @@ class UsuarioService {
     suspend fun login(correo:String, contrasena:String): Usuario?{
         try{
             val userResponse = UserClient.instance.login(correo, contrasena)
-            if(userResponse!=null){
-                return userResponse
+            return if(userResponse!=null){
+                userResponse
             }else{
-                return null
+                null
             }
         }catch (e:Exception){
             Log.e("Error logging",e.toString())
@@ -39,8 +39,8 @@ class UsuarioService {
 
     suspend fun miUsuario(id:String): Usuario?{
         try{
-            if(UserClient.instance.myUser(id)!=null){
-                return UserClient.instance.myUser(id)
+            return if(UserClient.instance.myUser(id)!=null){
+                UserClient.instance.myUser(id)
             }else{
                 return null
             }
@@ -52,10 +52,10 @@ class UsuarioService {
 
     suspend fun getVendedor(id:String): Usuario?{
         try{
-            if(UserClient.instance.getVendedor(id)!=null){
-                return UserClient.instance.getVendedor(id)
+            return if(UserClient.instance.getVendedor(id)!=null){
+                UserClient.instance.getVendedor(id)
             }else{
-                return null
+                null
             }
         }catch (e:Exception){
             Log.e("Error obteniendo usuario",e.message.toString())

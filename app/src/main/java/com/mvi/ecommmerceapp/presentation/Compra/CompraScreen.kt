@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -58,6 +59,15 @@ import com.mvi.ecommmerceapp.ui.theme.cardBrown
 import com.mvi.ecommmerceapp.ui.theme.complementaryBrown
 import com.mvi.ecommmerceapp.ui.theme.mainBrown
 import com.mvi.ecommmerceapp.UDF.use
+import com.mvi.ecommmerceapp.presentation.Components.CompraBanner
+import com.mvi.ecommmerceapp.presentation.Components.CompraEsp
+import com.mvi.ecommmerceapp.presentation.Components.CompraFloatingButton
+import com.mvi.ecommmerceapp.presentation.Components.CompraSalePersonEsp
+import com.mvi.ecommmerceapp.presentation.Components.ConfirmacionCard
+import com.mvi.ecommmerceapp.presentation.Components.DescuentoCard
+import com.mvi.ecommmerceapp.presentation.Components.ProductoCard
+import com.mvi.ecommmerceapp.presentation.Components.SignatureDialog
+import com.mvi.ecommmerceapp.presentation.Components.VendedorCard
 import com.mvi.ecommmerceapp.presentation.Compra.Intent.CompraContract
 import com.mvi.ecommmerceapp.presentation.Compra.ViewModel.CompraViewModel
 import com.mvi.ecommmerceapp.presentation.QrScanner.Intent.QrScannerContract
@@ -77,18 +87,17 @@ fun CompraScreen(
     digitalInkViewModel: DigitalInkViewModel
 ) {
     val showSignature = remember{ mutableStateOf(false) }
-    val resetCanvas = remember{ mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     val (state, event) = use(digitalInkViewModel, DigitalInkViewModel.State())
-    val (compraState,compraEvent,compraEffect)= use(compraViewModel)
-    val (qrState,qrEvent,qrEffect)= use(qrScannerViewModel)
+    val (compraState,compraEvent)= use(compraViewModel)
+    val qrEvent= use(qrScannerViewModel)
 
     LaunchedEffect(key1 = true ){
-        event(DigitalInkViewModel.Event.ResetText)
-        qrEvent.invoke(
+        event.invoke(DigitalInkViewModel.Event.ResetText)
+        qrEvent.dispatch.invoke(
             QrScannerContract.Event.getTimeExecution
         )
-        qrEvent.invoke(
+        qrEvent.dispatch.invoke(
             QrScannerContract.Event.getRamExecution
         )
     }
@@ -108,7 +117,7 @@ fun CompraScreen(
 
     LaunchedEffect(key1 = true){
         compraEvent.invoke(
-            CompraContract.Event.onGetVendedor(producto.vendidoPor!!)
+            CompraContract.Event.OnGetVendedor(producto.vendidoPor!!)
         )
         discountLink.value=qrScannerViewModel.qrLink.value
         Log.i("barcode2",qrScannerViewModel.qrLink.value)
@@ -117,20 +126,9 @@ fun CompraScreen(
 
     Scaffold(
         floatingActionButton = {
-            ExtendedFloatingActionButton(
-                shape= CircleShape,
-                modifier=Modifier.padding(bottom = 70.dp),
-                onClick = {
-                    compraEvent.invoke(
-                        CompraContract.Event.onComprarProducto(producto)
-                    )
-
-                    navController.navigate("home")
-                          },
-                containerColor = complementaryBrown
-            ) {
-                Text(text = "Comprar", fontWeight = FontWeight.Black, modifier = Modifier.padding(end=10.dp))
-                Icon(imageVector = Icons.Default.Check, contentDescription = "vender")
+            CompraFloatingButton {
+                CompraContract.Event.OnComprarProducto(producto)
+                navController.navigate("home")
             }
         }
     ) {
@@ -141,85 +139,26 @@ fun CompraScreen(
                 contentPadding = PaddingValues(top=20.dp, bottom = 100.dp)
             ){
                 item{
-                    Column(
-                        modifier=Modifier.fillMaxWidth(0.9f),
-                    ){
-                        Row(
-                            modifier=Modifier.padding(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ){
-                            Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "compra",modifier=Modifier.padding(end=5.dp))
-                            Text("Compra", fontWeight = FontWeight.Black, fontSize = 20.sp)
-                        }
-
-                    }
+                    CompraBanner()
                 }
                 item{
-                    Column(
-                        modifier=Modifier.fillMaxWidth(0.9f)
-                    ){
-                        Text("Vendido por",modifier=Modifier.padding(10.dp), fontWeight = FontWeight.Black)
-                    }
+                    CompraSalePersonEsp()
                 }
                 item{
-                    Column(
-                        modifier= Modifier
-                            .fillMaxWidth(0.9f)
-                            .background(cardBrown, RoundedCornerShape(20.dp))
-                    ) {
-                        Row(
-                            modifier= Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ){
-                            AsyncImage(model = "https://picsum.photos/id/${200}/200/200/?blur=5", contentDescription = "user",
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(100.dp)
-                            )
-                            Column(modifier=Modifier.padding(start=10.dp)) {
-                                Text(compraState.vendedor.nombre.capitalize()+" "+compraState.vendedor.apellido.capitalize())
-                                Text(compraState.vendedor.correo, fontWeight = FontWeight.Black)
-                            }
-
-                        }
-                    }
-                    Spacer(modifier = Modifier.padding(10.dp))
+                    VendedorCard(
+                        nombre = compraState.vendedor.nombre ,
+                        apellido = compraState.vendedor.apellido ,
+                        correo = compraState.vendedor.correo
+                    )
                 }
                 item{
-                    Column(
-                        modifier=Modifier.fillMaxWidth(0.9f)
-                    ){
-                        Text("Datos del producto",modifier=Modifier.padding(10.dp), fontWeight = FontWeight.Black)
-                    }
+                    CompraEsp()
                 }
                 item{
-                    Column(modifier=Modifier.fillMaxWidth(0.9f)) {
-                        AsyncImage(model = photo, contentDescription = "background",
-                            modifier= Modifier
-                                .fillMaxWidth()
-                                .height(200.dp)
-                                .clip(RoundedCornerShape(20.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Row(){
-                            Text("Título", fontWeight = FontWeight.Black, modifier = Modifier.width(100.dp))
-                            Text(producto.titulo)
-                        }
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Row(){
-                            Text("Descripción", fontWeight = FontWeight.Black, modifier = Modifier.width(100.dp))
-                            Text(producto.descripcion)
-                        }
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Row(){
-                            Text("Precio",fontWeight = FontWeight.Black, modifier = Modifier.width(100.dp))
-                            Text(producto.precio+" $")
-                        }
-                        Spacer(modifier = Modifier.padding(10.dp))
-                    }
+                    ProductoCard(
+                        photo = photo,
+                        producto = producto
+                    )
                 }
                 item{
                     Column(
@@ -227,73 +166,15 @@ fun CompraScreen(
                             .fillMaxWidth(0.9f)
                             .padding(10.dp)
                     ){
-                        Text("Obtener descuento",modifier=Modifier, fontWeight = FontWeight.Black)
-                        Text("Escanear QR único")
-
-
-                        if(discountLink.value!=""){
-                            Spacer(modifier = Modifier.padding(10.dp))
-                            Box(
-                                modifier=Modifier.background(cardBrown, RoundedCornerShape(20.dp))
-                            ){
-                                Text("Link de descuento " + discountLink.value,modifier= Modifier
-                                    .padding(10.dp)
-                                    .align(
-                                        Alignment.Center
-                                    ))
-                            }
-
-                        }
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Button(
-                            onClick = {
-                                navController.navigate("qrscanner")
-                                qrEvent.invoke(
-                                    QrScannerContract.Event.setStartEx(LocalTime.now())
-                                )
-                            },
-                            modifier= Modifier.fillMaxWidth(),
-                            colors= ButtonDefaults.buttonColors(
-                                containerColor = mainBrown,
-                                contentColor = Color.White
-                            )
-                        ) {
-                            if(discountLink.value!=""){
-                                Text("Volver a escanear")
-                            }else{
-                                Text("Escanear")
-                            }
-
-                        }
-                        Spacer(modifier=Modifier.padding(10.dp))
-                        Text("Confirmación de compra",modifier=Modifier, fontWeight = FontWeight.Black)
-                        Text("Escriba su nombre ")
-                        Spacer(modifier = Modifier.padding(10.dp))
-                        Button(
-                            onClick = {
-                                      showSignature.value=true
-                            },
-                            modifier= Modifier.fillMaxWidth(),
-                            colors= ButtonDefaults.buttonColors(
-                                containerColor = mainBrown,
-                                contentColor = Color.White
-                            )
-                        ) {
-                            Text("Escribir")
-                        }
-                        if(state.finalText!=""){
-                            Spacer(modifier = Modifier.padding(5.dp))
-                            Box(
-                                modifier=Modifier.background(cardBrown, RoundedCornerShape(20.dp))
-                            ){
-                                Text("Nombre " + state.finalText,modifier= Modifier
-                                    .padding(10.dp)
-                                    .align(
-                                        Alignment.Center
-                                    ))
-                            }
-
-                        }
+                        DescuentoCard(
+                            discountLink = discountLink,
+                            navController = navController ,
+                            qrEvent = qrEvent
+                        )
+                        ConfirmacionCard(
+                            finalText=state.finalText,
+                            showSignature = showSignature
+                        )
                     }
 
 
@@ -302,59 +183,11 @@ fun CompraScreen(
         }
     }
     if(showSignature.value){
-        Dialog(onDismissRequest = {showSignature.value=false }) {
-            Box(
-                modifier= Modifier
-                    .fillMaxWidth(0.95f)
-                    .background(Color.White, RoundedCornerShape(20.dp))
-            ){
-                Column(
-                    modifier=Modifier.padding(10.dp)
-                ) {
-                    DrawSpace(
-                        reset= state.resetCanvas,
-                        onDrawEvent = { event(DigitalInkViewModel.Event.Pointer(it)) },
-                        modifier = Modifier
-                            .height(150.dp)
-                            .fillMaxWidth()
-                    )
-                    Spacer(Modifier.padding(10.dp))
-                    Text("Recomendamos escribir su nombre letra por letra",modifier=Modifier.padding(5.dp))
-                    Text(state.finalText,modifier=Modifier.fillMaxWidth(0.9f))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ){
-                        Button(
-                            onClick = {
-                                event(DigitalInkViewModel.Event.ResetText)
-                            },
-                            colors= ButtonDefaults.buttonColors(
-                                containerColor = Color.Red,
-                                contentColor = Color.White
-                            )
-                        ) {
-                            Text("Reiniciar")
-                        }
-                        Button(
-                            onClick = {
-                                showSignature.value=false
-                            },
-                            colors= ButtonDefaults.buttonColors(
-                                containerColor = mainBrown,
-                                contentColor = Color.White
-                            )
-                        ) {
-                            Text("Guardar")
-                        }
-                    }
-
-
-                }
-
-            }
-
-        }
+        SignatureDialog(
+            showSignature=showSignature,
+            digitalInkState = digitalInkViewModel.state.collectAsState().value,
+            pointerEvent = event
+        )
     }
 
 

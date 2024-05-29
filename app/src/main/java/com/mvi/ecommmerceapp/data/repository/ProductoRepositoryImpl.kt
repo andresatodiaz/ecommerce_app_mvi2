@@ -11,21 +11,20 @@ class ProductoRepositoryImpl(
     private val productoService: ProductoService
 ): ProductoRepository {
     override suspend fun getProductos(): List<Producto>? {
-        if(productoService.getProductos().isNullOrEmpty()){
-            return emptyList()
+        return if(productoService.getProductos().isNullOrEmpty()){
+            emptyList()
         }else{
-            Log.i("productosRep", productoService.getProductos().toString())
-            return productoService.getProductos()?.sortedBy { producto->
+            productoService.getProductos()?.sortedBy { producto->
                 producto.precio.toInt()
             }
         }
     }
 
     override suspend fun getMisProductos(id: String): List<Producto> {
-        if(productoService.getProductos().isNullOrEmpty()){
-            return emptyList()
+        return if(productoService.getProductos().isNullOrEmpty()){
+            emptyList()
         }else{
-            return productoService.getProductos()!!.filter {producto->
+            productoService.getProductos()!!.filter {producto->
                 producto.vendidoPor==id
             }
         }

@@ -46,7 +46,6 @@ class HomeViewModel @Inject constructor(
     override fun event(event: HomeContract.Event) = when(event){
         is HomeContract.Event.onGetProductos->
             getData()
-        HomeContract.Event.onRefresh -> getData()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

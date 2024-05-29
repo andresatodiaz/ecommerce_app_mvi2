@@ -56,24 +56,30 @@ fun MainNavigationGraph(
         ) {
         composable("home"){
             qrScannerViewModel.qrLink.value=""
-            HomeScreen(navController,selectedProducto,selectedProductoUrl,homeViewModel)
+            HomeScreen(
+                navController=navController,
+                selectedProducto=selectedProducto,
+                selectedProductoUrl=selectedProductoUrl,
+                homeViewModel=homeViewModel
+            )
         }
         composable("discover"){
-            DiscoverScreen(
-                discoverViewModel
-            )
+            DiscoverScreen(discoverViewModel)
         }
         composable("profile"){
             PerfilScreen(
-                finishActivity,
-                flagKillActivity,
-                perfilViewModel,
-                navController,selectedProducto,selectedProductoUrl
+                finishActivity=finishActivity,
+                flagKillActivity=flagKillActivity,
+                perfilViewModel=perfilViewModel,
+                navController=navController,
+                selectedProducto=selectedProducto,
+                selectedProductoUrl=selectedProductoUrl
             )
         }
         composable("vender"){
-            CrearProductoScreen(navController,
-                venderViewModel,
+            CrearProductoScreen(
+                navController=navController,
+                venderViewModel=venderViewModel,
             )
         }
         composable("producto"){
@@ -85,8 +91,8 @@ fun MainNavigationGraph(
                 photo = selectedProductoUrl.value,
                 producto = selectedProducto.value,
                 navController=navController,
-                productoViewModel =productoViewModel,
                 showQRScanner=showQRScanner,
+                productoViewModel = productoViewModel
             )
         }
         composable("compra"){
@@ -97,7 +103,7 @@ fun MainNavigationGraph(
                 photo = selectedProductoUrl.value,
                 producto = selectedProducto.value,
                 navController=navController,
-                compraViewModel = compraViewModel,
+                compraViewModel=compraViewModel,
                 qrScannerViewModel=qrScannerViewModel,
                 digitalInkViewModel=digitalInkViewModel
             )
@@ -107,7 +113,10 @@ fun MainNavigationGraph(
             BackHandler {
                 navController.navigate("producto")
             }
-            QrScannerScreen(navController,qrScannerViewModel)
+            QrScannerScreen(
+                navController=navController,
+                qrScannerViewModel=qrScannerViewModel
+            )
         }
     }
 
