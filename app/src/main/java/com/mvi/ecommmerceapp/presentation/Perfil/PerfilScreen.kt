@@ -43,7 +43,7 @@ fun PerfilScreen(
     selectedProductoUrl:MutableState<String>,
 ) {
     val (state, event) = use(viewModel = perfilViewModel)
-    val refreshing=perfilViewModel.state.collectAsState().value.refreshing
+    val refreshing=state.refreshing
     val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing =refreshing )
     val productos=state.productos
 

@@ -34,7 +34,7 @@ fun HomeScreen(
 ) {
     val id = remember{mutableStateOf("")}
     val (state, event) = use(viewModel = homeViewModel)
-    val refreshing=homeViewModel.refreshing.value
+    val refreshing=state.refreshing
     val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing =refreshing)
 
     LaunchedEffect(key1 = true){

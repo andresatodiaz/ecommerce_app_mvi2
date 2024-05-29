@@ -51,7 +51,9 @@ class HomeViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     fun getData(
     ){
-        refreshing.value=true
+        mutableState.update {
+            mutableState.value.copy(refreshing = true)
+        }
         viewModelScope.launch {
             val startTime = LocalTime.now()
             val usuario = usuarioRepository.getMyUser()
@@ -61,10 +63,10 @@ class HomeViewModel @Inject constructor(
                 HomeContract.State(
                     usuario = usuario,
                     productos= productos,
+                    refreshing = false
                 )
             }
             getToken()
-            refreshing.value=false
             Log.i("comp-ExecutionTime-Home", Duration.between(startTime,LocalTime.now()).toMillis().toString())
             Log.i("comp-MemoryConsump-Home", MemoryConsumption().getUsedMemorySize().toString())
         }
