@@ -34,7 +34,7 @@ fun Register(
     loginMenu: MutableState<Int>
 ) {
     val coroutine= rememberCoroutineScope()
-    val (state, event, effect) = use(viewModel = loginViewModel)
+    val event = use(viewModel = loginViewModel)
 
     Column(
         modifier=Modifier.padding(20.dp)
@@ -78,7 +78,7 @@ fun Register(
             Button(
                 onClick = {
                     coroutine.launch {
-                        event.invoke(
+                        event.dispatch.invoke(
                             LoginContract.Event.Register(
                                 correo.value,
                                 contrasena.value,

@@ -38,7 +38,7 @@ fun Login(
     goToMain: ()-> Unit
 ) {
     val coroutine= rememberCoroutineScope()
-    val (state, event, effect) = use(viewModel = loginViewModel)
+    val event = use(viewModel = loginViewModel)
 
     Column(
         modifier=Modifier.padding(20.dp)
@@ -68,7 +68,7 @@ fun Login(
                 Button(
                     onClick = {
                         coroutine.launch {
-                            event.invoke(
+                            event.dispatch.invoke(
                                 LoginContract.Event.Login(correo.value,contrasena.value){
                                     goToMain()
                                 }

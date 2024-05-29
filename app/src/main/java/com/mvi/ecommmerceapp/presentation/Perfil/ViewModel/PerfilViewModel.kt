@@ -1,9 +1,7 @@
 package com.mvi.ecommmerceapp.presentation.Perfil.ViewModel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mvi.ecommmerceapp.domain.Entities.Usuario
 import com.mvi.ecommmerceapp.domain.Repository.UsuarioRepository
 import com.mvi.ecommmerceapp.presentation.Perfil.Intent.PerfilContract
 import com.mvi.ecommmerceapp.domain.Repository.ProductoRepository
@@ -23,7 +21,6 @@ class PerfilViewModel @Inject constructor(
     private val productoRepository: ProductoRepository,
     private val usuarioRepository: UsuarioRepository
 ):ViewModel(), PerfilContract {
-    val myUser = mutableStateOf(Usuario())
 
     private val mutableState = MutableStateFlow(PerfilContract.State())
     override val state: StateFlow<PerfilContract.State> =
@@ -33,8 +30,6 @@ class PerfilViewModel @Inject constructor(
     override val effect: SharedFlow<PerfilContract.Effect> =
         effectFlow.asSharedFlow()
 
-    val refreshing = mutableStateOf(true)
-
     override fun event(event: PerfilContract.Event)= when(event) {
         is PerfilContract.Event.getPerfil->
             getData()
@@ -43,17 +38,19 @@ class PerfilViewModel @Inject constructor(
     }
 
     private fun getData(){
-        refreshing.value=true
+        mutableState.update {
+            mutableState.value.copy(refreshing = true)
+        }
         viewModelScope.launch {
             val usuario = usuarioRepository.getMyUser()
             val productos = productoRepository.getMisProductos(usuario.id)
             mutableState.update {
                 PerfilContract.State(
                     usuario=usuario,
-                    productos = productos!!,
+                    productos = productos,
+                    refreshing = false
                 )
             }
-            refreshing.value=false
         }
     }
 }

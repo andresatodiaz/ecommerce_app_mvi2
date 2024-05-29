@@ -7,7 +7,7 @@ interface LoginContract:
     UnidirectionalViewModel<LoginContract.State, LoginContract.Event, LoginContract.Effect>{
         data class State(
             val loggedUser: Usuario = Usuario(),
-            val refresh: Boolean = false
+            val refreshing: Boolean = false
         )
 
         sealed class Event{

@@ -9,7 +9,8 @@ interface HomeContract:
     data class State(
         val productos:List<Producto> = listOf(),
         val refreshing: Boolean = true,
-        val usuario: Usuario = Usuario()
+        val usuario: Usuario = Usuario(),
+        val loggedId:String=""
     )
 
     sealed class Event {

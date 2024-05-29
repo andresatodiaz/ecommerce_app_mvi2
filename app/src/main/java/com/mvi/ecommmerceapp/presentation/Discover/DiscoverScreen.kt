@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -48,30 +49,29 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.mvi.ecommmerceapp.UDF.use
-import com.mvi.ecommmerceapp.presentation.Home.Intent.HomeContract
 import com.mvi.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.mvi.ecommmerceapp.ui.theme.cardBrown
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.mvi.ecommmerceapp.domain.Entities.Producto
+import com.mvi.ecommmerceapp.presentation.Discover.Intent.DiscoverContract
+import com.mvi.ecommmerceapp.presentation.Discover.ViewModel.DiscoverViewModel
+import kotlin.reflect.KFunction1
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DiscoverScreen(
-    navController:NavController,
-    homeViewModel: HomeViewModel
+    discoverViewModel: DiscoverViewModel
 ){
     val focusManager = LocalFocusManager.current
     val searchName = remember{mutableStateOf("")}
-    val (state, event, effect) = use(viewModel = homeViewModel)
-    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = homeViewModel.refreshing.value)
+    val swipeRefreshState  = rememberSwipeRefreshState(isRefreshing = discoverViewModel.state.collectAsState().value.refreshing )
+    val productos=discoverViewModel.state.collectAsState().value.productos
     LaunchedEffect(key1 = true){
-        if(state.productos.isEmpty()){
-            event.invoke(
-                HomeContract.Event.onGetProductos
-            )
+        if(productos.isEmpty()){
+            discoverViewModel.event(DiscoverContract.Event.onGetProductos)
         }
     }
 
@@ -96,9 +96,7 @@ fun DiscoverScreen(
             SwipeRefresh(
                 state = swipeRefreshState,
                 onRefresh = {
-                    event.invoke(
-                        HomeContract.Event.onGetProductos
-                    )
+                    discoverViewModel.event(DiscoverContract.Event.onGetProductos)
                 },
                 indicator = { state, trigger ->
                     SwipeRefreshIndicator(
@@ -162,7 +160,7 @@ fun DiscoverScreen(
                             )
                         )
                     }
-                    state.productos.forEachIndexed { index, producto ->
+                    productos.forEachIndexed { index, producto ->
                         if(searchName.value==""
                             || (searchName.value!="" && producto.titulo.lowercase().contains(searchName.value.lowercase()))
                         ){

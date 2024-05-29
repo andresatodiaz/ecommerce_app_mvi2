@@ -1,6 +1,8 @@
 package com.mvi.ecommmerceapp.Navigation
 
+import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.camera.core.ExperimentalGetImage
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -16,6 +18,7 @@ import com.mvi.ecommmerceapp.presentation.Compra.ViewModel.CompraViewModel
 import com.mvi.ecommmerceapp.presentation.Vender.CrearProductoScreen
 import com.mvi.ecommmerceapp.presentation.Vender.ViewModel.VenderViewModel
 import com.mvi.ecommmerceapp.presentation.Discover.DiscoverScreen
+import com.mvi.ecommmerceapp.presentation.Discover.ViewModel.DiscoverViewModel
 import com.mvi.ecommmerceapp.presentation.Home.HomeScreen
 import com.mvi.ecommmerceapp.presentation.Home.ViewModel.HomeViewModel
 import com.mvi.ecommmerceapp.presentation.Perfil.PerfilScreen
@@ -27,6 +30,7 @@ import com.mvi.ecommmerceapp.presentation.QrScanner.ViewModel.QrScannerViewModel
 import com.mvi.ecommmerceapp.presentation.Signature.DigitalInkViewModel
 import com.mvi.ecommmerceapp.presentation.Signature.DigitalInkViewModelImpl
 
+@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalGetImage
 @Composable
 fun MainNavigationGraph(
@@ -38,6 +42,7 @@ fun MainNavigationGraph(
     venderViewModel: VenderViewModel = hiltViewModel(),
     compraViewModel: CompraViewModel = hiltViewModel(),
     productoViewModel: ProductoViewModel = hiltViewModel(),
+    discoverViewModel: DiscoverViewModel= hiltViewModel(),
     showQRScanner: MutableState<Boolean>,
     qrScannerViewModel: QrScannerViewModel= hiltViewModel(),
     digitalInkViewModel: DigitalInkViewModel = hiltViewModel<DigitalInkViewModelImpl>()
@@ -54,7 +59,9 @@ fun MainNavigationGraph(
             HomeScreen(navController,selectedProducto,selectedProductoUrl,homeViewModel)
         }
         composable("discover"){
-            DiscoverScreen(navController,homeViewModel)
+            DiscoverScreen(
+                discoverViewModel
+            )
         }
         composable("profile"){
             PerfilScreen(
